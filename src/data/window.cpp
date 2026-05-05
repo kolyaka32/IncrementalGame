@@ -1,11 +1,10 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "window.hpp"
 #include "../define.hpp"
-#include "exceptions.hpp"
 
 
 Window::Window(int _width, int _height, const LanguagedText _title)
@@ -26,14 +25,14 @@ titleText(_title) {
     // Checking on correction of created objects
     #if (CHECK_CORRECTION)
     if (window == NULL) {
-        throw LibararyLoadException("window creation");
+        logger.important("Can't create window");
     }
     #endif
 
     // Creating renderer from window
     #if (CHECK_CORRECTION)
     if (renderer == NULL) {
-        throw LibararyLoadException("renderer creation");
+        logger.important("Can't create renderer");
     }
     #endif
 }
@@ -93,6 +92,10 @@ void Window::drawLine(float x1, float y1, float x2, float y2) const {
     SDL_RenderLine(renderer, x1, y1, x2, y2);
 }
 
+void dra() {
+    
+}
+
 
 // Work with surfaces
 SDL_Surface* Window::createSurface(int _width, int _height, SDL_PixelFormat _format) const {
@@ -121,6 +124,12 @@ SDL_Texture* Window::createTextureAndFree(SDL_Surface* _surface) const {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, _surface);
     SDL_DestroySurface(_surface);
     return texture;
+}
+
+void Window::copyTexture(SDL_Texture* _dest, SDL_Texture* _src) const {
+    setRenderTarget(_dest);
+    SDL_RenderTexture(renderer, _src, nullptr, nullptr);
+    resetRenderTarget();
 }
 
 void Window::blit(SDL_Texture* _texture, const SDL_FRect& _dest) const {

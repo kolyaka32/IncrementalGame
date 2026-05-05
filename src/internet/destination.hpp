@@ -1,38 +1,33 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "../data/logger.hpp"
+#include "messages/confirmedMessage.hpp"
 
-#if (USE_SDL_NET)
-
-#include "messages/message.hpp"
+#if (USE_NET)
 
 
 // Class with address and port for send operation
 class Destination {
  protected:
-    // Adress and port of client, sending to
-    NET_Address* address;
-    Uint16 port;
+    // Address and port, where can sending or recieve from
+    sockaddr_in address;
 
  public:
-    Destination(NET_Address* address, Uint16 port);
-    bool operator==(const Destination& b);
-    void send(NET_DatagramSocket* sock, const Message& message) const;
+    Destination(const sockaddr_in* address);
+    Destination(const sockaddr* address, int size);
+    Destination(const char* name, Uint16 port);
+
+    // Operator for compare addresses (for search in list)
+    bool operator==(const sockaddr_in* compareAddress) const;
+    // Getters
+    sockaddr* getAddress() const;
+    int getSize() const;
     const char* getName() const;
-    NET_DatagramSocket* getDatagrammSocket();
+    Uint16 getPort() const;
 };
 
-
-//
-class StringDestination : public Destination {
- public:
-   StringDestination(const char* address, Uint16 port);
-   ~StringDestination();
-};
-
-#endif  // (USE_SDL_NET)
+#endif  // (USE_NET)

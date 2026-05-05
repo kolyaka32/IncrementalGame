@@ -1,11 +1,12 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "../define.hpp"
+#include "logger.hpp"
 
 
 // Custom
@@ -33,7 +34,7 @@ const T& Array<T>::operator[](unsigned _index) const {
     // Additional check on correction
     #if CHECK_CORRECTION
     if (_index >= size) {
-        throw "Wrong address";
+        logger.important("Wrong address");
     }
     #endif
     return data[_index];

@@ -3,11 +3,10 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "gravityCycle.hpp"
-#include "selectCycle.hpp"
+#include "gameCycle.hpp"
 
 
-GravityCycle::GravityCycle(Window& _window)
+GameCycle::GameCycle(Window& _window)
 : BaseCycle(_window),
 field(2000) {
     if (!isRestarted()) {
@@ -16,7 +15,7 @@ field(2000) {
     }
 }
 
-bool GravityCycle::inputMouseDown() {
+bool GameCycle::inputMouseDown() {
     if (BaseCycle::inputMouseDown()) {
         return true;
     }
@@ -24,18 +23,18 @@ bool GravityCycle::inputMouseDown() {
     return false;
 }
 
-void GravityCycle::inputMouseUp() {
+void GameCycle::inputMouseUp() {
     mouse.updatePos();
     field.unclickBoard(mouse);
     settings.unClick();
 }
 
-void GravityCycle::inputMouseWheel(float _wheelY) {
+void GameCycle::inputMouseWheel(float _wheelY) {
     BaseCycle::inputMouseWheel(_wheelY);
     field.scroll(_wheelY);
 }
 
-void GravityCycle::inputKeys(SDL_Keycode _key) {
+void GameCycle::inputKeys(SDL_Keycode _key) {
     // Quiting to menu
     if (_key == SDLK_Q) {
         stop();
@@ -47,7 +46,7 @@ void GravityCycle::inputKeys(SDL_Keycode _key) {
     }
 }
 
-void GravityCycle::update() {
+void GameCycle::update() {
     BaseCycle::update();
 
     Mouse mouse{};
@@ -59,7 +58,7 @@ void GravityCycle::update() {
     field.updatePositions();
 }
 
-void GravityCycle::draw() const {
+void GameCycle::draw() const {
     // Bliting background
     window.setDrawColor(BLACK);
     window.clear();

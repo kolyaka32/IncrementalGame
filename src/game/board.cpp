@@ -60,7 +60,7 @@ void Board::clickBilliard(const Mouse _mouse) {
             if (balls[i].isSelected(current)) {
                 selected = &balls[i];
                 lastPoint = current;
-                logAdditional("Selected %d", i);
+                logger.additional("Selected %d", i);
                 return;
             }
         }
@@ -90,7 +90,7 @@ void Board::checkCollisionBilliard() {
 }
 
 void Board::blitBoard(const Window& _window) const {
-    _window.blit(_window.getTexture(Textures::Board), grid.absolute(sides));
+    //_window.blit(_window.getTexture(Textures::Board), grid.absolute(sides));
 }
 
 

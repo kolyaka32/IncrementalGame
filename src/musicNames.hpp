@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,9 +7,7 @@
 
 #include "define.hpp"
 
-
-// Check, if use mixer and preload music
-#if (USE_SDL_MIXER) && (PRELOAD_MUSIC)
+#if (PRELOAD_MUSIC)
 
 
 // Names of music tracks
@@ -24,4 +22,4 @@ enum class Music {
 // File names of the corresponding music
 extern const char* musicFilesNames[unsigned(Music::Count)];
 
-#endif  // (USE_SDL_MIXER) && (PRELOAD_MUSIC)
+#endif  // (PRELOAD_MUSIC)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -16,4 +16,13 @@ void App::stop() {
 
 bool App::isRunning() {
     return running;
+}
+
+void App::setNextCycle(Cycle _nextCycle) {
+    nextCycle = _nextCycle;
+    CycleTemplate::stop();
+}
+
+Cycle App::getNextCycle() {
+    return nextCycle;
 }

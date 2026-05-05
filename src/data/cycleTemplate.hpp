@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -16,7 +16,6 @@ class CycleTemplate {
  private:
     static bool running;            // Flag of current running state
     static bool restarting;         // Flag, if game was restarted
-    static bool additionalRestart;  // Flag of additional game restart
     IdleTimer idleTimer{1000/60};   // Timer to idle in main cycle
 
  protected:
@@ -42,27 +41,4 @@ class CycleTemplate {
     static void stop();
     static void restart();
     static bool isRestarted();
-    static bool isAdditionalRestarted();
-    // Function for starting new cycle with posible arguments
-    template <class NewCycle, typename ...Args>
-    static void runCycle(Window& window, const Args& ...args);
 };
-
-
-template <class NewCycle, typename ...Args>
-void CycleTemplate::runCycle(Window& _window, const Args& ...args) {
-    restarting = false;
-    additionalRestart = false;
-
-    // Running current cycle, while restarting
-    do {
-        // Launching new cycle
-        NewCycle cycle(_window, args...);
-        cycle.run();
-    } while (App::isRunning() && (restarting | additionalRestart));
-
-    // Restarting external running cycle for correct language change
-    restarting = false;
-    additionalRestart = true;
-    running = false;
-}

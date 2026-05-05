@@ -1,15 +1,13 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "textures.hpp"
 
-#if (USE_SDL_IMAGE) && (PRELOAD_TEXTURES)
+#if (PRELOAD_TEXTURES)
 
-#include <SDL3_image/SDL_image.h>
 #include "loader/loader.hpp"
-#include "../exceptions.hpp"
 
 
 TexturesData::TexturesData(SDL_Renderer* _renderer) {
@@ -29,10 +27,11 @@ TexturesData::TexturesData(SDL_Renderer* _renderer) {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Textures::Count); ++i) {
         if (textures[i] == NULL) {
-            throw DataLoadException(texturesFilesNames[i]);
+            logger.important("Don't load texture: %s", texturesFilesNames[i]);
+            return;
         }
     }
-    logAdditional("Textures loaded corretly");
+    logger.additional("Textures loaded corretly");
     #endif
 }
 
@@ -53,7 +52,8 @@ void TexturesData::loadTexture(SDL_Renderer* _renderer, Textures _index, const c
     // Checking correction of created surface
     #if (CHECK_CORRECTION)
     if (surface == nullptr) {
-        throw DataLoadException(_fileName);
+        logger.important("Can't create surface: %s", _fileName);
+        return;
     }
     #endif
 
@@ -63,7 +63,8 @@ void TexturesData::loadTexture(SDL_Renderer* _renderer, Textures _index, const c
     // Checking correction of loaded texture
     #if (CHECK_CORRECTION)
     if (textures[unsigned(_index)] == nullptr) {
-        throw DataLoadException(_fileName);
+        logger.important("Can't create texture: %s", _fileName);
+        return;
     }
     #endif
 
@@ -74,4 +75,4 @@ SDL_Texture* TexturesData::operator[] (Textures _index) const {
     return textures[unsigned(_index)];
 }
 
-#endif  // (USE_SDL_IMAGE) && (PRELOAD_TEXTURES)
+#endif  // (PRELOAD_TEXTURES)

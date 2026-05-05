@@ -1,11 +1,13 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include <string>
+#include <array>
+#include <initializer_list>
 #include "logger.hpp"
 #include "../languagesNames.hpp"
 
@@ -13,15 +15,25 @@
 // Class, storing one text variant in different locations
 class LanguagedText {
  private:
+    // Text in different languages
+    const std::array<const std::string, (unsigned)Language::Count> textVariants;
+    // Currently selected language for whole app
     static Language currentLanguage;
-    const std::string textVariants[(unsigned)Language::Count];
 
  public:
-    LanguagedText(const std::string englishVariant, const std::string russianVariant,
-        const std::string germanVariant, const std::string bellarussianVariant);
+    // englishVariant, russianVariant, germanVariant, bellarussianVariant
+    template <typename ...Vars>
+    LanguagedText(const Vars... variants);
     LanguagedText(const std::string singleVariant);
+    LanguagedText(const LanguagedText& copyText) noexcept;
+    LanguagedText(LanguagedText&& movedText) noexcept;
     const std::string& getString() const;
     // Options for change current language
+    // Return true, if need to change language
     static bool setLanguage(Language newLanguage);
     static Language getLanguage();
 };
+
+template <typename ...Vars>
+LanguagedText::LanguagedText(const Vars... _variants)
+: textVariants{_variants...} {}

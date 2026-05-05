@@ -1,14 +1,13 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "animations.hpp"
 
-#if (USE_SDL_IMAGE) && (PRELOAD_ANIMATIONS)
+#if (PRELOAD_ANIMATIONS)
 
 #include "loader/loader.hpp"
-#include "../exceptions.hpp"
 
 
 AnimationsData::AnimationsData() {
@@ -28,10 +27,11 @@ AnimationsData::AnimationsData() {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Animations::Count); ++i) {
         if (animations[i] == nullptr) {
-            throw DataLoadException(animationsFilesNames[i]);
+            logger.important("Don't load animation: %s", animationsFilesNames[i]);
+            return;
         }
     }
-    logAdditional("Animations loaded corretly");
+    logger.additional("Animations loaded corretly");
     #endif
 }
 
@@ -52,7 +52,8 @@ void AnimationsData::loadAnimation(Animations _index, const char* _fileName) {
     // Checking correction of loaded texture
     #if (CHECK_CORRECTION)
     if (animations[unsigned(_index)] == nullptr) {
-        throw DataLoadException(_fileName);
+        logger.important("Can't load animation: %s", _fileName);
+        return;
     }
     #endif
 }
@@ -61,4 +62,4 @@ IMG_Animation* AnimationsData::operator[] (Animations _index) const {
     return animations[unsigned(_index)];
 }
 
-#endif  // (USE_SDL_IMAGE) && (PRELOAD_ANIMATIONS)
+#endif  // (PRELOAD_ANIMATIONS)

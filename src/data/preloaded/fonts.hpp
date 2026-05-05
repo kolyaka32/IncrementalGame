@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,10 +7,13 @@
 
 #include "../../fontsNames.hpp"
 
-// Check, if use fonts and preload it
-#if (USE_SDL_FONT) && (PRELOAD_FONTS)
+#if (PRELOAD_FONTS)
 
+#if (USE_SDL_FONT)
 #include <SDL3_ttf/SDL_ttf.h>
+#else
+#error "Can't preload fonts without library"
+#endif
 
 
 // Class for get font with need height
@@ -25,4 +28,4 @@ class FontsData {
     TTF_Font* operator[](Fonts index) const;
 };
 
-#endif  // (USE_SDL_FONT) && (PRELOAD_FONTS)
+#endif  // (PRELOAD_FONTS)

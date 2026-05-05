@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -22,10 +22,19 @@ class SettingsMenu : GUI::Template {
     // Title
     GUI::HighlightedStaticText titleText;
     // Flags for select language
+    #if (USE_SDL_IMAGE)
     const GUI::ImageButton flags[(unsigned)Language::Count];
-    // Sliders and it texts
+    #endif
+    // Sliders for music (if need)
+    #if (PRELOAD_MUSIC)
+    GUI::HighlightedStaticText musicText;
+    GUI::Slider musicSlider;
+    #endif
+    // Slider for sounds (if need)
+    #if (PRELOAD_SOUNDS)
     GUI::HighlightedStaticText soundText;
     GUI::Slider soundSlider;
+    #endif
     // Quit button
     GUI::TextButton exitButton;
 
@@ -34,7 +43,7 @@ class SettingsMenu : GUI::Template {
     void blit() const;
     bool click(const Mouse mouse);
     void unClick();
-    void scroll(const Mouse mouse, float wheelY);
+    bool scroll(const Mouse mouse, float wheelY);
     void update();
     void activate();
 };

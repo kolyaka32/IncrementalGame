@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -12,7 +12,9 @@
 
 // Files to setup
 #include "data/languages.hpp"
-#include "data/preloaded/sounds.hpp"
+#include "game/gameField.hpp"
+#include "game/gameMenu/savedFields.hpp"
+#include "menu/targetConnect.hpp"
 
 
 // Data, load from setting file
@@ -38,8 +40,16 @@ void InitFile::loadSettings() {
             } else if (lang == "belarusian") {
                 LanguagedText::setLanguage(Language::Bellarusian);
             }
+        } else if (parameter == "music") {
+            audio.music.setVolume(getValue(currentLine) / 100.0f);
         } else if (parameter == "sounds") {
-            sounds.setVolume(getValue(currentLine));
+            audio.sounds.setVolume(getValue(currentLine) / 100.0f);
+        } else if (parameter == "IP") {
+            TargetConnect::writeBaseIP(getText(currentLine).c_str());
+        } else if (parameter == "port") {
+            TargetConnect::writeBasePort(getText(currentLine).c_str());
+        } else if (parameter == "save") {
+            SavedFields::addField(getText(currentLine));
         }
     }
     // Closing reading file
@@ -78,7 +88,17 @@ void InitFile::saveSettings() {
     }
 
     // Writing music and sounds volumes
-    outSettings << "sounds = " << sounds.getVolume() << "\n";
+    outSettings << "music = " << int(audio.music.getVolume()*100) << "\n";
+    outSettings << "sounds = " << int(audio.sounds.getVolume()*100) << "\n";
+
+    // Writing internet connection data
+    outSettings << "\n# Internet base parameters:\n";
+    outSettings << "IP = " << TargetConnect::getBaseIP() << "\n";
+    outSettings << "port = " << TargetConnect::getBasePort() << "\n";
+
+    // Saving fields
+    outSettings << "\n# Saves:\n";
+    SavedFields::saveFields(outSettings);
 }
 
 #endif  // (USE_SETTING_FILE)

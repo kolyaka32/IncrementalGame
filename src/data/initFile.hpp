@@ -1,13 +1,11 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "../define.hpp"
-#include "macroses.hpp"
-#include "exceptions.hpp"
 
 
 // Check if has initfile
@@ -27,5 +25,8 @@ class InitFile {
     void loadSettings();
     void saveSettings();
 };
+
+// Global file with all loading settings
+extern InitFile initFile;
 
 #endif  // (USE_SETTING_FILE)

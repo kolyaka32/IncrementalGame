@@ -1,14 +1,13 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "fonts.hpp"
 
-#if (USE_SDL_FONT) && (PRELOAD_FONTS)
+#if (PRELOAD_FONTS)
 
 #include "loader/loader.hpp"
-#include "../exceptions.hpp"
 
 
 FontsData::FontsData() {
@@ -28,10 +27,11 @@ FontsData::FontsData() {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Fonts::Count); ++i) {
         if (fonts[i] == NULL) {
-            throw DataLoadException(fontsFilesNames[i]);
+            logger.important("Don't load font: %s", fontsFilesNames[i]);
+            return;
         }
     }
-    logAdditional("Fonts loaded corretly");
+    logger.additional("Fonts loaded corretly");
     #endif
 }
 
@@ -39,6 +39,7 @@ FontsData::~FontsData() {
     // Closing all used fonts
     for (unsigned i=0; i < unsigned(Fonts::Count); ++i) {
         TTF_CloseFont(fonts[i]);
+        return;
     }
 }
 
@@ -50,7 +51,8 @@ void FontsData::loadFont(Fonts _index, const char* _fileName) {
     // Checking correction of loaded font
     #if (CHECK_CORRECTION)
     if (fonts[unsigned(_index)] == nullptr) {
-        throw DataLoadException(_fileName);
+        logger.important("Can't create font: %s", _fileName);
+        return;
     }
     #endif
 }
@@ -59,4 +61,4 @@ TTF_Font* FontsData::operator[](Fonts _index) const {
     return fonts[unsigned(_index)];
 }
 
-#endif  // (USE_SDL_FONT) && (PRELOAD_FONTS)
+#endif  // (PRELOAD_FONTS)

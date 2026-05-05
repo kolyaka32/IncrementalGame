@@ -1,25 +1,23 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "swap.hpp"
+#include "../library.hpp"
 
-// Check, if need internet library
-#if (USE_SDL_NET)
+#if (USE_NET)
 
 
 // Class with data for sending somewhere
 class Message {
  private:
     static const int maxSize = 100;
-    Uint8 data[maxSize];
+    char data[maxSize];
     unsigned size = 0;
 
  public:
-    Message();
     template <typename ...Args>
     Message(const Args ...args);
     // Writing functions
@@ -34,14 +32,13 @@ class Message {
     void write(const Array<T> object);
 
     // Getters
-    const Uint8* getData() const;
+    const char* getData() const;
     size_t getLength() const;
 };
 
 
 template <typename ...Args>
-Message::Message(const Args ...args)
-: Message() {
+Message::Message(const Args ...args) {
     write(args...);
 }
 
@@ -50,25 +47,26 @@ void Message::write(const T _object) {
     // Check on avaliable space
     #if (CHECK_CORRECTION)
     if (size + sizeof(T) > maxSize) {
-        throw "Can't write data - not enogh size";
+        logger.important("Can't write data - not enogh size");
+        return;
     }
     #endif
-    *(data + size) = swapLE<T>(_object);
+    *(data + size) = writeNet(_object);
     size += sizeof(T);
 }
 
 template<typename T>
 void Message::write(const Array<T> _object) {
     for (int i=0; i < _object.getSize(); ++i) {
-        write<T>(_object[i]);
+        write(_object[i]);
     }
 }
 
 template <typename T, typename ...Args>
 void Message::write(const T _object, const Args ...args) {
     // Writing current object
-    write<T>(_object);
+    write(_object);
     write(args...);
 }
 
-#endif  // (USE_SDL_NET)
+#endif  // (USE_NET)

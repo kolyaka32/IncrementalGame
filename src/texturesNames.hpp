@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,9 +7,7 @@
 
 #include "define.hpp"
 
-
-// Check, if can load images and preload it
-#if (USE_SDL_IMAGE) && (PRELOAD_TEXTURES)
+#if (PRELOAD_TEXTURES)
 
 
 // Names of all images with related numbers
@@ -19,17 +17,19 @@ enum class Textures : unsigned {
     SliderButton,
     SliderLine,
     QuitButton,
+    MenuButton,
+    SaveButton,
     SettingsButton,
 
     // Base flags in settings
     FlagUSA,
     FlagRUS,
-    FlagGER,
-    FlagBEL,
+    //FlagGER,
+    //FlagBEL,
 
     // Main game part
-    Ball,
-    Board,
+    //Ball,
+    //Board,
 
     // Global counter of all textures
     Count,
@@ -42,4 +42,4 @@ Textures operator-(const Textures index, int offset);
 // File names of the corresponding textures
 extern const char* texturesFilesNames[unsigned(Textures::Count)];
 
-#endif  // (USE_SDL_IMAGE) && (PRELOAD_TEXTURES)
+#endif  // (PRELOAD_TEXTURES)

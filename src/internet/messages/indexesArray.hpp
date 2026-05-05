@@ -1,23 +1,29 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
+#include <array>
 #include <SDL3/SDL_stdinc.h>
+
+#if (USE_NET)
 
 
 // Class for work with indexes of last get message
 template <unsigned length>
 class IndexesArray {
  private:
-    Uint8 array[length];  // Array with last getted messages for check repeats
-    int lastPosition;     // Position in array with last get message (for correct updation)
+    // Array with last getted messages for check repeats
+    std::array<Uint8, length> array;
+    // Position in array with last get message (for correct updation)
+    int lastPosition;
 
  public:
     IndexesArray();
-    ~IndexesArray();
     bool isUnique(Uint8 index);
     void add(Uint8 index);
 };
+
+#endif  // (USE_NET)

@@ -9,8 +9,8 @@
 #include "../game/board.hpp"
 
 
-// Cycle with game with gravity
-class GravityCycle : public BaseCycle {
+// Cycle with game
+class GameCycle : public BaseCycle {
  protected:
     // Active game part
     Board field;
@@ -24,5 +24,5 @@ class GravityCycle : public BaseCycle {
     void draw() const override;
 
  public:
-    GravityCycle(Window& _window);
+    GameCycle(Window& _window);
 };

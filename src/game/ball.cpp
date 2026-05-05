@@ -53,7 +53,7 @@ void Ball::checkCollisionBilliard(Ball& ball) {
         ball.uy += (1-friction) * uyDelta;
         //#endif
 
-        sounds.play(Sounds::Turn);
+        audio.sounds.play(Sounds::Turn);
     }
 }
 
@@ -105,7 +105,7 @@ void Ball::checkCollisionGravity(Ball& ball) {
         ball.uy += (1-friction) * uyDelta;
         //#endif
 
-        sounds.play(Sounds::Turn);
+        audio.sounds.play(Sounds::Turn);
     }
 }
 
@@ -160,20 +160,20 @@ void Ball::checkWalls(const SDL_FRect _rect) {
     if (dest.x < _rect.x) {
         ux = ux*(friction-1);
         dest.x = _rect.x;
-        sounds.play(Sounds::Turn);
+        audio.sounds.play(Sounds::Turn);
     } else if (dest.x+dest.w > _rect.x+_rect.w) {
         ux = ux*(friction-1);
         dest.x = _rect.x + _rect.w - dest.w;
-        sounds.play(Sounds::Turn);
+        audio.sounds.play(Sounds::Turn);
     }
     if (dest.y < _rect.y) {
         uy = uy*(friction-1);
         dest.y = _rect.y;
-        sounds.play(Sounds::Turn);
+        audio.sounds.play(Sounds::Turn);
     } else if (dest.y+dest.h > _rect.y+_rect.h) {
         uy = uy*(friction-1);
         dest.y = _rect.y + _rect.h - dest.h;
-        sounds.play(Sounds::Turn);
+        audio.sounds.play(Sounds::Turn);
     }
 }
 
@@ -186,5 +186,5 @@ void Ball::update() {
 }
 
 void Ball::blit(const Window& _window, const Grid _grid) const {
-    _window.blit(_window.getTexture(Textures::Ball), _grid.absolute(dest));
+    //_window.blit(_window.getTexture(Textures::Ball), _grid.absolute(dest));
 }

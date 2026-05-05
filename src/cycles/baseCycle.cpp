@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "baseCycle.hpp"
 
 
-// Base cycle class
 BaseCycle::BaseCycle(Window& _window)
 : CycleTemplate(_window),
 exitButton(window, 0.04, 0.05, 0.08, Textures::QuitButton),
@@ -17,7 +16,7 @@ bool BaseCycle::inputMouseDown() {
         return true;
     }
     if (exitButton.in(mouse)) {
-        stop();
+        App::setNextCycle(Cycle::None);
         return true;
     }
     return false;

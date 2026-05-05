@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,9 +7,7 @@
 
 #include "define.hpp"
 
-
-// Check, if use mixer and preload sounds
-#if (USE_SDL_MIXER) && (PRELOAD_SOUNDS)
+#if (PRELOAD_SOUNDS)
 
 
 // Names of sound effects
@@ -20,9 +18,12 @@ enum class Sounds : unsigned {
 
     // Global counter of all loaded sounds
     Count,
+
+    // Shortcut for changing slider sound in settings
+    SliderSound = Turn,
 };
 
 // File names of the corresponding sounds
 extern const char* soundsFilesNames[unsigned(Sounds::Count)];
 
-#endif  // (USE_SDL_MIXER) && (PRELOAD_SOUNDS)
+#endif  // (PRELOAD_SOUNDS)
