@@ -1,0 +1,1 @@
+zip -9r build/data-billiard.dat ani/* img/* mus/* snd/* fnt/*
