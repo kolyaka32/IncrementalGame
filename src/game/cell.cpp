@@ -10,7 +10,7 @@ Cell::Cell() {}
 
 void Cell::reset() {
     pressure = 0.0;
-    temperature = 0.0;
+    temperature = 20.0;
 }
 
 bool Cell::isSelected(const SDL_FPoint _point) const {
@@ -48,7 +48,7 @@ void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {
 }
 
 void Cell::blitThermal(const Window& _window, SDL_FRect _rect) const {
-    _window.setDrawColor({Uint8(temperature*255), 0, 0, 255});
+    _window.setDrawColor({Uint8(temperature/1000*255), 0, 0, 255});
     _window.drawRect(_rect);
 }
 

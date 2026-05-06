@@ -8,10 +8,10 @@
 
 GameCycle::GameCycle(Window& _window)
 : BaseCycle(_window),
-field() {
+board(_window) {
     if (!isRestarted()) {
         // Resetting field
-        field.reset();
+        board.reset();
     }
 }
 
@@ -19,20 +19,20 @@ bool GameCycle::inputMouseDown() {
     if (BaseCycle::inputMouseDown()) {
         return true;
     }
-    field.click(mouse);
+    board.click(mouse);
     return false;
 }
 
 void GameCycle::inputMouseUp() {
     mouse.updatePos();
-    field.unclick(mouse);
+    board.unclick(mouse);
     settings.unClick();
 }
 
 void GameCycle::inputMouseWheel(float _wheelY) {
     mouse.updatePos();
     BaseCycle::inputMouseWheel(_wheelY);
-    field.scroll(mouse, _wheelY);
+    board.scroll(mouse, _wheelY);
 }
 
 void GameCycle::inputKeys(SDL_Keycode _key) {
@@ -50,10 +50,9 @@ void GameCycle::inputKeys(SDL_Keycode _key) {
 void GameCycle::update() {
     BaseCycle::update();
 
-    Mouse mouse{};
     mouse.updatePos();
 
-    field.update(mouse);
+    board.update(mouse);
 }
 
 void GameCycle::draw() const {
@@ -62,7 +61,7 @@ void GameCycle::draw() const {
     window.clear();
 
     // Blitting field
-    field.blit(window);
+    board.blit();
 
     // Drawing upper dashboard
     exitButton.blit();

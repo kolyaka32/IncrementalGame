@@ -6,14 +6,14 @@
 #pragma once
 
 #include "baseCycle.hpp"
-#include "../game/board.hpp"
+#include "../game/boardInteracter.hpp"
 
 
 // Cycle with game
 class GameCycle : public BaseCycle {
  protected:
     // Active game part
-    Board field;
+    BoardInteracter board;
 
     // New overrided cycle functions
     bool inputMouseDown() override;

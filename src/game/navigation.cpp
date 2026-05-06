@@ -6,6 +6,9 @@
 #include "navigation.hpp"
 
 
+// Static objects
+Grid grid;
+
 Grid::Grid() {
     capture = false;
     centerX = 0;
