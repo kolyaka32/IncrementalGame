@@ -58,6 +58,7 @@ class Window {
     void drawPoint(float x, float y) const;
     void drawRect(const SDL_FRect& rect) const;
     void drawLine(float x1, float y1, float x2, float y2) const;
+    void drawGeometry(const SDL_Vertex* vertices, int numVerticies, SDL_Texture* texture = nullptr) const;
 
     // Work with own surfaces
     SDL_Surface* createSurface(int width, int height, SDL_PixelFormat format = SDL_PIXELFORMAT_RGBA32) const;

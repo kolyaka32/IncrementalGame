@@ -92,8 +92,8 @@ void Window::drawLine(float x1, float y1, float x2, float y2) const {
     SDL_RenderLine(renderer, x1, y1, x2, y2);
 }
 
-void dra() {
-    
+void Window::drawGeometry(const SDL_Vertex* _vertices, int _numVer, SDL_Texture* _texture) const {
+    SDL_RenderGeometry(renderer, _texture, _vertices, _numVer, nullptr, 0);
 }
 
 

@@ -265,6 +265,32 @@ namespace GUI {
     };
 
 
+    // Object for selecting variants from list
+    class SwitchBox : GUI::Template {
+     private:
+        unsigned selected = 0;
+        bool opened = false;
+        // Draw options
+        const float height;
+        SDL_FRect background;
+        std::vector<StaticText> drawnTexts;
+
+        // Static options
+        SDL_Texture* arrowTexture;
+        SDL_FRect arrowRect;
+
+     public:
+        SwitchBox(const Window& window, float X, float Y, float W, std::initializer_list<LanguagedText> texts,
+            unsigned startOption = 0, float size = Height::Main, Color color = WHITE);
+        // Getter/setter
+        void set(unsigned value);
+        unsigned getValue();
+
+        bool click(const Mouse mouse);  // return true, when entered new value
+        void blit() const override;
+    };
+
+
     // Class of appearing for time and hidden by time text
     class InfoBox : public HighlightedStaticText {
      private:
