@@ -6,7 +6,8 @@
 #include "board.hpp"
 
 
-Board::Board() {
+Board::Board(float _X, float _Y, float _side)
+: firstRect{_X, _Y, _side, _side} {
     reset();
 }
 

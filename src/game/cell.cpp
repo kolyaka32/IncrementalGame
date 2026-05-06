@@ -48,11 +48,11 @@ void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {
 }
 
 void Cell::blitThermal(const Window& _window, SDL_FRect _rect) const {
-    _window.setDrawColor({Uint8(temperature/1000*255), 0, 0, 255});
+    _window.setDrawColor({Uint8(temperature*2), 0, 0, 255});
     _window.drawRect(_rect);
 }
 
 void Cell::blitPressure(const Window& _window, SDL_FRect _rect) const {
-    _window.setDrawColor({0, 0, Uint8(pressure*255), 255});
+    _window.setDrawColor({0, 0, Uint8(pressure*2), 255});
     _window.drawRect(_rect);
 }

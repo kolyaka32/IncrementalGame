@@ -9,11 +9,25 @@
 #include "board.hpp"
 
 
+// Possible states of current showing
+enum class ShowState {
+    Normal,
+    Thermal,
+    Pressure,
+};
+
 // Class for interact with and visualise board
 class BoardInteracter : GUI::Template {
 private:
     static Board board;
     static ShowState state;
+
+    // Graphical part
+    GUI::RectBackplate backplate;
+    GUI::HighlightedStaticText modeText;
+    GUI::TextButton normalModeButton;
+    GUI::TextButton thermalModeButton;
+    GUI::TextButton pressureModeButton;
 
 public:
     BoardInteracter(const Window& window);

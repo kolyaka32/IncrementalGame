@@ -7,17 +7,39 @@
 
 
 // Static objects
-Board BoardInteracter::board{};
+Board BoardInteracter::board{300.0, 50.0, 40.0};
 ShowState BoardInteracter::state = ShowState::Normal;
 
 BoardInteracter::BoardInteracter(const Window& _window)
-: Template(_window) {}
+: Template(_window),
+backplate(_window, 0.12, 0.5, 0.24, 1.0, 2.0, GREY, BLACK),
+modeText(_window, 0.12, 0.15, {"Show mode:", "Режим отображения:"}, 1),
+normalModeButton(_window, 0.12, 0.2, {"Elements", "Элементы"}),
+thermalModeButton(_window, 0.12, 0.25, {"Thermal", "Температурный"}),
+pressureModeButton(_window, 0.12, 0.3, {"Pressure", "Давление"}) {}
 
 void BoardInteracter::reset() {
     board.reset();
 }
 
 void BoardInteracter::click(const Mouse _mouse) {
+    // Check, if in interface part
+    if (backplate.in(_mouse)) {
+        if (normalModeButton.in(_mouse)) {
+            state = ShowState::Normal;
+            return;
+        }
+        if (thermalModeButton.in(_mouse)) {
+            state = ShowState::Thermal;
+            return;
+        }
+        if (pressureModeButton.in(_mouse)) {
+            state = ShowState::Pressure;
+            return;
+        }
+        return;
+    }
+
     // Start camera movement
     if (_mouse.getState() & SDL_BUTTON_MMASK) {
         grid.click(_mouse.getX(), _mouse.getY());
@@ -38,21 +60,29 @@ void BoardInteracter::update(const Mouse _mouse) {
 }
 
 void BoardInteracter::blit() const {
+    // Draw board
     switch (state) {
     case ShowState::Normal:
         board.blitNormal(window);
         break;
 
     case ShowState::Thermal:
-        board.blitNormal(window);
+        board.blitThermal(window);
         break;
 
     case ShowState::Pressure:
-        board.blitNormal(window);
+        board.blitPressure(window);
         break;
 
     default:
         break;
     }
     board.blitLines(window);
+
+    // Interface
+    backplate.blit();
+    modeText.blit();
+    normalModeButton.blit();
+    thermalModeButton.blit();
+    pressureModeButton.blit();
 }
