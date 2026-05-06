@@ -74,7 +74,7 @@ class Window {
     void blit(SDL_Texture* texture, const SDL_FRect& dest) const;
     void blit(SDL_Texture* texture, const SDL_FRect* dest = nullptr, const SDL_FRect* src = nullptr) const;
     void blit(SDL_Texture* texture, float angle, const SDL_FRect& rect, const SDL_FRect* src = nullptr,
-        SDL_FPoint center = {0, 0}) const;
+        SDL_FPoint center = {0, 0}, SDL_FlipMode flipMode = SDL_FLIP_NONE) const;
     void setRenderTarget(SDL_Texture* target) const;
     void resetRenderTarget() const;
     void setBlendMode(SDL_Texture* texture, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE) const;

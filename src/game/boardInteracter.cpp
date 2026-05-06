@@ -14,9 +14,8 @@ BoardInteracter::BoardInteracter(const Window& _window)
 : Template(_window),
 backplate(_window, 0.12, 0.5, 0.24, 1.0, 2.0, GREY, BLACK),
 modeText(_window, 0.12, 0.15, {"Show mode:", "Режим отображения:"}, 1),
-normalModeButton(_window, 0.12, 0.2, {"Elements", "Элементы"}),
-thermalModeButton(_window, 0.12, 0.25, {"Thermal", "Температурный"}),
-pressureModeButton(_window, 0.12, 0.3, {"Pressure", "Давление"}) {}
+modeSwitchBox(_window, 0.12, 0.2, 0.2, {{"Elements", "Элементы"},
+    {"Thermal", "Температурный"}, {"Pressure", "Давление"}}) {}
 
 void BoardInteracter::reset() {
     board.reset();
@@ -25,16 +24,8 @@ void BoardInteracter::reset() {
 void BoardInteracter::click(const Mouse _mouse) {
     // Check, if in interface part
     if (backplate.in(_mouse)) {
-        if (normalModeButton.in(_mouse)) {
-            state = ShowState::Normal;
-            return;
-        }
-        if (thermalModeButton.in(_mouse)) {
-            state = ShowState::Thermal;
-            return;
-        }
-        if (pressureModeButton.in(_mouse)) {
-            state = ShowState::Pressure;
+        if (modeSwitchBox.click(_mouse)) {
+            state = ShowState(modeSwitchBox.getValue());
             return;
         }
         return;
@@ -82,7 +73,5 @@ void BoardInteracter::blit() const {
     // Interface
     backplate.blit();
     modeText.blit();
-    normalModeButton.blit();
-    thermalModeButton.blit();
-    pressureModeButton.blit();
+    modeSwitchBox.blit();
 }

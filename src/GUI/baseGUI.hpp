@@ -42,6 +42,7 @@ namespace GUI {
         TextureTemplate(const Window& window, SDL_FRect rect, SDL_Texture* texture = nullptr);
         TextureTemplate(TextureTemplate&& object) noexcept;
         void move(float X, float Y);
+        void moveAbsolute(float X, float Y);
         void blit() const override;
         virtual bool in(const Mouse mouse) const;
     };
@@ -273,6 +274,7 @@ namespace GUI {
         // Draw options
         const float height;
         SDL_FRect background;
+        const SDL_Color backColor;
         std::vector<StaticText> drawnTexts;
 
         // Static options
@@ -281,7 +283,7 @@ namespace GUI {
 
      public:
         SwitchBox(const Window& window, float X, float Y, float W, std::initializer_list<LanguagedText> texts,
-            unsigned startOption = 0, float size = Height::Main, Color color = WHITE);
+            unsigned startOption = 0, float size = Height::Main, Color backColor = WHITE, Color frontColor = BLACK);
         // Getter/setter
         void set(unsigned value);
         unsigned getValue();

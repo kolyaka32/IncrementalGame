@@ -25,9 +25,7 @@ private:
     // Graphical part
     GUI::RectBackplate backplate;
     GUI::HighlightedStaticText modeText;
-    GUI::TextButton normalModeButton;
-    GUI::TextButton thermalModeButton;
-    GUI::TextButton pressureModeButton;
+    GUI::SwitchBox modeSwitchBox;
 
 public:
     BoardInteracter(const Window& window);
