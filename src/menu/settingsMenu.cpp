@@ -12,13 +12,13 @@ bool SettingsMenu::active = false;
 SettingsMenu::SettingsMenu(const Window& _window)
 : Template(_window),
 settingButton{_window, 0.96, 0.05, 0.04, Textures::SettingsButton},
-background{_window, 0.5, 0.5, 0.4, 0.6, 20, 4},
-titleText{_window, 0.5, 0.24, {"Pause", "Пауза"}, 2, Height::Info},
+background{_window, 0.5, 0.5, 0.4, 0.7, 20, 4},
+titleText{_window, 0.5, 0.2, {"Pause", "Пауза"}, 2, Height::Info},
 flags {
-    {_window, 0.4, 0.4, 0.15, Textures::FlagUSA},
-    {_window, 0.6, 0.4, 0.15, Textures::FlagRUS},
-    //{window, 0.35, 0.45, 0.25, Textures::FlagGER},
-    //{window, 0.65, 0.45, 0.25, Textures::FlagBEL},
+    {_window, 0.4, 0.3, 0.15, Textures::FlagUSA},
+    {_window, 0.6, 0.3, 0.15, Textures::FlagRUS},
+    //{window, 0.35, 0.5, 0.25, Textures::FlagGER},
+    //{window, 0.65, 0.5, 0.25, Textures::FlagBEL},
 },
 #if (PRELOAD_MUSIC)
 musicText{_window, 0.5, 0.58, {"Music", "Музыка"}, 1},
@@ -28,7 +28,7 @@ musicSlider{_window, 0.5, 0.64, 0.5, audio.music.getVolume()},
 soundText{_window, 0.5, 0.7, {"Sounds", "Звуки"}, 1},
 soundSlider{_window, 0.5, 0.76, 0.5, audio.sounds.getVolume()},
 #endif
-exitButton{_window, 0.5, 0.75, {"Exit", "Выход"}} {}
+exitButton{_window, 0.5, 0.8, {"Exit", "Выход"}} {}
 
 bool SettingsMenu::click(const Mouse _mouse) {
     // Check, if click on setting butoon

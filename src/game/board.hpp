@@ -5,44 +5,29 @@
 
 #pragma once
 
-#include <vector>
-#include "ball.hpp"
+#include "cell.hpp"
 
 
-//
+// Main object
 class Board {
  private:
     Grid grid;
-    const int count;
-    std::vector<Ball> balls;
-    Ball* selected = nullptr;
-    SDL_FPoint lastPoint = {0, 0};
+    static const int height = 20, width = 20;
+    Cell currentBoard[height*width];
+    Cell newBoard[height*width];
+    SDL_FRect firstRect = {0.0, 0.0, 100.0, 100.0};
+
     int pressed = 0;
-    SDL_FRect sides = {50, 50, 1000, 1000};
 
  public:
-    Board(int count);
-    ~Board();
+    Board();
     void reset();
 
     // Interacting with scale and position
-    void clickBoard(const Mouse _mouse);
-    void updateBoard(const Mouse _mouse);
-    void unclickBoard(const Mouse _mouse);
-    void scroll(float wheelY);
+    void click(const Mouse mouse);
+    void update(const Mouse mouse);
+    void unclick(const Mouse mouse);
+    void scroll(const Mouse mouse, float wheelY);
 
-    // Billiard-specified options
-    void clickBilliard(const Mouse _mouse);
-    void unclickBilliard(const Mouse _mouse);
-    void checkWallsCollisions();
-    void checkCollisionBilliard();
-    void blitBoard(const Window& window) const;
-
-    // Gravity specified options
-    void applyGravity(const Mouse _mouse);
-    void checkCollisionGravity();
-
-    // General options
-    void updatePositions();
-    void blitBalls(const Window& window) const;
+    void blit(const Window& window) const;
 };

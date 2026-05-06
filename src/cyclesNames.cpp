@@ -18,10 +18,11 @@ void App::run(Window& _window) {
         // Selecting new
         switch (nextCycle) {
         case Cycle::Main:
-            runCycle<BaseCycle>(_window);
+            runCycle<GameCycle>(_window);
             break;
         
         default:
+            running = false;
             break;
         }
     }
