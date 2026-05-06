@@ -8,6 +8,13 @@
 #include "cell.hpp"
 
 
+enum class ShowState {
+    Normal,
+    Thermal,
+    Pressure,
+};
+
+
 // Main object
 class Board {
  private:
@@ -15,7 +22,8 @@ class Board {
     static const int height = 20, width = 20;
     Cell currentBoard[height*width];
     Cell newBoard[height*width];
-    SDL_FRect firstRect = {0.0, 0.0, 100.0, 100.0};
+    ShowState state = ShowState::Normal;
+    SDL_FRect firstRect = {100.0, 20.0, 40.0, 40.0};
 
     int pressed = 0;
 

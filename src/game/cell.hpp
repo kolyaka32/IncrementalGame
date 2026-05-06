@@ -11,7 +11,18 @@
 
 //
 class Cell {
+ public:
+    enum State : Uint8 {
+        Air,
+        Wall,
+        VentUp,
+        VentRight,
+        VentDown,
+        VentLeft,
+    };
+
  private:
+    State state = Air;
     float pressure;
     float temperature;
 
@@ -20,5 +31,7 @@ class Cell {
     void reset();
     bool isSelected(SDL_FPoint point) const;
     void update();
-    void blit(const Window& window, SDL_FRect rect) const;
+    void blitNormal(const Window& window, SDL_FRect rect) const;
+    void blitThermal(const Window& window, SDL_FRect rect) const;
+    void blitPressure(const Window& window, SDL_FRect rect) const;
 };

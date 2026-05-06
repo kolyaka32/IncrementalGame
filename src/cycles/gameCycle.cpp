@@ -58,7 +58,7 @@ void GameCycle::update() {
 
 void GameCycle::draw() const {
     // Bliting background
-    window.setDrawColor(BLACK);
+    window.setDrawColor(GREY);
     window.clear();
 
     // Blitting field
