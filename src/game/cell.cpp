@@ -13,10 +13,12 @@ void Cell::reset() {
     temperature = 20.0;
 }
 
-bool Cell::isSelected(const SDL_FPoint _point) const {
-    return false;
-    /*(sqr(_point.x - dest.x - dest.w/2) + 
-        sqr(_point.y - dest.y - dest.h/2) < diameter*diameter/4);*/
+void Cell::applyPressure(float _pressure) {
+    pressure += _pressure;
+}
+
+void Cell::applyTemperature(float _temperature) {
+    temperature += _temperature;
 }
 
 void Cell::update() {

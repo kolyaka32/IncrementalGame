@@ -6,73 +6,88 @@
 #include "board.hpp"
 
 
-Board::Board(float _X, float _Y, float _side)
-: firstRect{_X, _Y, _side, _side} {
+Board::Board() {
     reset();
 }
 
 void Board::reset() {
     SDL_srand(getTime());
     for (int i=0; i < height*width; ++i) {
-        currentBoard[i].reset();
+        cells[i].reset();
     }
 }
 
-void Board::blitNormal(const Window& _window) const {
-    SDL_FRect rect = grid.absolute(firstRect);
+int Board::getWidth() const {
+    return width;
+}
+
+int Board::getHeight() const {
+    return height;
+}
+
+void Board::applyPressure(SDL_Point _pos, float _pressure) {
+    cells[_pos.y*width+_pos.x].applyPressure(_pressure);
+}
+
+void Board::applyTemperature(SDL_Point _pos, float _temperature) {
+    cells[_pos.y*width+_pos.x].applyTemperature(_temperature);
+}
+
+void Board::update() {
+    Cell newCells[height*width];
+}
+
+void Board::blitNormal(const Window& _window, SDL_FRect _cellRect) const {
     for (int y=0; y < height; ++y) {
         for (int x=0; x < width; ++x) {
-            currentBoard[y*width+x].blitNormal(_window, rect);
-            rect.x += rect.w;
+            cells[y*width+x].blitNormal(_window, _cellRect);
+            _cellRect.x += _cellRect.w;
         }
-        rect.x -= rect.w * width;
-        rect.y += rect.h;
+        _cellRect.x -= _cellRect.w * width;
+        _cellRect.y += _cellRect.h;
     }
 }
 
-void Board::blitThermal(const Window& _window) const {
-    SDL_FRect rect = grid.absolute(firstRect);
+void Board::blitThermal(const Window& _window, SDL_FRect _cellRect) const {
     for (int y=0; y < height; ++y) {
         for (int x=0; x < width; ++x) {
-            currentBoard[y*width+x].blitThermal(_window, rect);
-            rect.x += rect.w;
+            cells[y*width+x].blitThermal(_window, _cellRect);
+            _cellRect.x += _cellRect.w;
         }
-        rect.x -= rect.w * width;
-        rect.y += rect.h;
+        _cellRect.x -= _cellRect.w * width;
+        _cellRect.y += _cellRect.h;
     }
 }
 
-void Board::blitPressure(const Window& _window) const {
-    SDL_FRect rect = grid.absolute(firstRect);
+void Board::blitPressure(const Window& _window, SDL_FRect _cellRect) const {
     for (int y=0; y < height; ++y) {
         for (int x=0; x < width; ++x) {
-            currentBoard[y*width+x].blitPressure(_window, rect);
-            rect.x += rect.w;
+            cells[y*width+x].blitPressure(_window, _cellRect);
+            _cellRect.x += _cellRect.w;
         }
-        rect.x -= rect.w * width;
-        rect.y += rect.h;
+        _cellRect.x -= _cellRect.w * width;
+        _cellRect.y += _cellRect.h;
     }
 }
 
-void Board::blitLines(const Window& _window) const {
+void Board::blitLines(const Window& _window, SDL_FRect _cellRect) const {
     // Draw separating lines
     _window.setDrawColor(BLACK);
-    const SDL_FRect rect = grid.absolute(firstRect);
-    // Opposite side from corner
-    const SDL_FPoint oppositeP = grid.absolute(SDL_FPoint{firstRect.x + firstRect.w * width,
-        firstRect.y + firstRect.h * height});
+    // Fining opposite side
+    const SDL_FPoint oppositeP = {_cellRect.x + _cellRect.w*width,
+        _cellRect.y + _cellRect.h*height};   
 
     // Vertical lines
-    float x = rect.x;
+    float x = _cellRect.x;
     for (int i=0; i <= width; ++i) {
-        _window.drawLine(x, rect.y, x, oppositeP.y);
-        x += rect.w;
+        _window.drawLine(x, _cellRect.y, x, oppositeP.y);
+        x += _cellRect.w;
     }
 
     // Horizontal lines
-    float y = rect.y;
+    float y = _cellRect.y;
     for (int i=0; i <= height; ++i) {
-        _window.drawLine(rect.x, y, oppositeP.x, y);
-        y += rect.h;
+        _window.drawLine(_cellRect.x, y, oppositeP.x, y);
+        y += _cellRect.h;
     }
 }

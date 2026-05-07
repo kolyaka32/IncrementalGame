@@ -21,14 +21,19 @@ class BoardInteracter : GUI::Template {
 private:
     static Board board;
     static ShowState state;
+    int mousePress;  // State for pressing mouse from SDL_MouseButtonFlags
+
+    // Rects of local positions of board
+    const SDL_FRect cellRect;
+    const SDL_FRect boardBackground;
 
     // Graphical part
-    GUI::RectBackplate backplate;
+    GUI::RectBackplate panelBackplate;
     GUI::HighlightedStaticText modeText;
     GUI::SwitchBox modeSwitchBox;
 
 public:
-    BoardInteracter(const Window& window);
+    BoardInteracter(const Window& window, float boardX, float boardY, float panelW);
 
     void reset();
 

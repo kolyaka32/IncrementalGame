@@ -12,18 +12,21 @@
 class Board {
  private:
     static const int height = 20, width = 20;
-    Cell currentBoard[height*width];
-    Cell newBoard[height*width];
-    const SDL_FRect firstRect;
-
-    int pressed = 0;
+    Cell cells[height*width];
 
  public:
-    Board(float X, float Y, float side);
+    Board();
     void reset();
+    int getWidth() const;
+    int getHeight() const;
 
-    void blitNormal(const Window& window) const;
-    void blitThermal(const Window& window) const;
-    void blitPressure(const Window& window) const;
-    void blitLines(const Window& window) const;
+    // Interaction
+    void applyPressure(SDL_Point pos, float pressure);
+    void applyTemperature(SDL_Point pos, float temperature);
+    void update();
+
+    void blitNormal(const Window& window, SDL_FRect cellRect) const;
+    void blitThermal(const Window& window, SDL_FRect cellRect) const;
+    void blitPressure(const Window& window, SDL_FRect cellRect) const;
+    void blitLines(const Window& window, SDL_FRect cellRect) const;
 };

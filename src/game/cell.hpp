@@ -29,8 +29,9 @@ class Cell {
  public:
     Cell();
     void reset();
-    bool isSelected(SDL_FPoint point) const;
     void update();
+    void applyPressure(float pressure);
+    void applyTemperature(float temperature);
     void blitNormal(const Window& window, SDL_FRect rect) const;
     void blitThermal(const Window& window, SDL_FRect rect) const;
     void blitPressure(const Window& window, SDL_FRect rect) const;

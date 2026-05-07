@@ -7,39 +7,47 @@
 
 
 // Static objects
-Board BoardInteracter::board{300.0, 50.0, 40.0};
+Board BoardInteracter::board;
 ShowState BoardInteracter::state = ShowState::Normal;
 
-BoardInteracter::BoardInteracter(const Window& _window)
+BoardInteracter::BoardInteracter(const Window& _window, float _boardX, float _boardY, float _panelW)
 : Template(_window),
-backplate(_window, 0.12, 0.5, 0.24, 1.0, 2.0, GREY, BLACK),
-modeText(_window, 0.12, 0.15, {"Show mode:", "Режим отображения:"}, 1),
-modeSwitchBox(_window, 0.12, 0.2, 0.2, {{"Elements", "Элементы"},
+cellRect{_boardX*_window.getWidth(), _boardY*_window.getHeight(), 40.0f, 40.0f},
+boardBackground{cellRect.x, cellRect.y, cellRect.w*board.getWidth(), cellRect.h*board.getHeight()},
+panelBackplate(_window, _panelW/2, 0.5, _panelW, 1.0, 2.0, GREY, BLACK),
+modeText(_window, _panelW/2, 0.15, {"Show mode:", "Режим отображения:"}, 1),
+modeSwitchBox(_window, _panelW/2, 0.2, 0.2, {{"Elements", "Элементы"},
     {"Thermal", "Температурный"}, {"Pressure", "Давление"}}) {}
 
 void BoardInteracter::reset() {
     board.reset();
+    mousePress = 0;
 }
 
 void BoardInteracter::click(const Mouse _mouse) {
     // Check, if in interface part
-    if (backplate.in(_mouse)) {
+    if (panelBackplate.in(_mouse)) {
+        // Check, if changing show mode
         if (modeSwitchBox.click(_mouse)) {
             state = ShowState(modeSwitchBox.getValue());
             return;
         }
+        // Check, if dragging item
+        // !
         return;
     }
+    // Check, if start interaction
+    mousePress = _mouse.getState();
 
     // Start camera movement
-    if (_mouse.getState() & SDL_BUTTON_MMASK) {
+    if (mousePress == SDL_BUTTON_MMASK) {
         grid.click(_mouse.getX(), _mouse.getY());
     }
 }
 
 void BoardInteracter::unclick(const Mouse _mouse) {
-    // Applying camera movement
-    grid.unClick(_mouse.getX(), _mouse.getY());
+    // Resetting movement
+    mousePress = 0;
 }
 
 void BoardInteracter::scroll(const Mouse _mouse, float _wheelY) {
@@ -47,31 +55,53 @@ void BoardInteracter::scroll(const Mouse _mouse, float _wheelY) {
 }
 
 void BoardInteracter::update(const Mouse _mouse) {
-    grid.update(_mouse.getX(), _mouse.getY());
+    if (mousePress == SDL_BUTTON_MMASK) {
+        grid.update(_mouse.getX(), _mouse.getY());
+    }
+
+    // Finding absolute position of background
+    SDL_FRect backgroundRect = grid.absolute(boardBackground);
+
+    // If click on field
+    if (_mouse.in(backgroundRect)) {
+        // Finding connected cell
+        const SDL_FRect rect = grid.absolute(cellRect);
+        SDL_Point position = {int((_mouse.getX()-rect.x)/rect.w), int((_mouse.getY()-rect.y)/rect.h)};
+
+        if (mousePress == SDL_BUTTON_LMASK) {
+            board.applyPressure(position, 1.0);
+        }
+        if (mousePress == SDL_BUTTON_RMASK) {
+            board.applyTemperature(position, 1.0);
+        }
+    }
 }
 
 void BoardInteracter::blit() const {
+    // Get rect of first cell
+    const SDL_FRect rect = grid.absolute(cellRect);
+
     // Draw board
     switch (state) {
     case ShowState::Normal:
-        board.blitNormal(window);
+        board.blitNormal(window, rect);
         break;
 
     case ShowState::Thermal:
-        board.blitThermal(window);
+        board.blitThermal(window, rect);
         break;
 
     case ShowState::Pressure:
-        board.blitPressure(window);
+        board.blitPressure(window, rect);
         break;
 
     default:
         break;
     }
-    board.blitLines(window);
+    board.blitLines(window, rect);
 
-    // Interface
-    backplate.blit();
+    // Paanel interface
+    panelBackplate.blit();
     modeText.blit();
     modeSwitchBox.blit();
 }
