@@ -16,11 +16,11 @@ class Grid {
     float scale;
 
     // Parameters of movement
-    bool capture;
     float captureX, captureY;
 
  public:
     Grid();
+    void reset();
 
     void click(float mouseX, float mouseY);
     void unClick(float mouseX, float mouseY);

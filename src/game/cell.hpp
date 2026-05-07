@@ -29,9 +29,13 @@ class Cell {
  public:
     Cell();
     void reset();
-    void update();
+
+    // Interactions
+    void update(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to nother place
     void applyPressure(float pressure);
     void applyTemperature(float temperature);
+
+    // Drawing
     void blitNormal(const Window& window, SDL_FRect rect) const;
     void blitThermal(const Window& window, SDL_FRect rect) const;
     void blitPressure(const Window& window, SDL_FRect rect) const;

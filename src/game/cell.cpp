@@ -21,9 +21,8 @@ void Cell::applyTemperature(float _temperature) {
     temperature += _temperature;
 }
 
-void Cell::update() {
-    //ux *= speed;
-    //uy *= speed;
+void Cell::update(const Cell& _src2, Cell& _dst1, Cell& _dst2) const {
+    // !
 }
 
 void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {
@@ -50,11 +49,19 @@ void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {
 }
 
 void Cell::blitThermal(const Window& _window, SDL_FRect _rect) const {
-    _window.setDrawColor({Uint8(temperature*2), 0, 0, 255});
+    if (temperature > 127.0) {
+        _window.setDrawColor({255, 0, 0, 255});
+    } else {
+        _window.setDrawColor({Uint8(temperature*2), 0, 0, 255});
+    }
     _window.drawRect(_rect);
 }
 
 void Cell::blitPressure(const Window& _window, SDL_FRect _rect) const {
-    _window.setDrawColor({0, 0, Uint8(pressure*2), 255});
+    if (pressure > 254.0) {
+        _window.setDrawColor({0, 0, 255, 255});
+    } else {
+        _window.setDrawColor({0, 0, Uint8(pressure), 255});
+    }
     _window.drawRect(_rect);
 }

@@ -10,30 +10,26 @@
 Grid grid;
 
 Grid::Grid() {
-    capture = false;
+    reset();
+}
+
+void Grid::reset() {
     centerX = 0;
     centerY = 0;
     scale = 1;
 }
 
 void Grid::update(float mouseX, float mouseY) {
-    if (capture) {
-        // Keeping captured point at it place
-        centerX = mouseX - captureX*scale;
-        centerY = mouseY - captureY*scale;
-        logger.additional("Press at %f : %f, get at %f : %f", mouseX, mouseY, centerX, centerY);
-    }
+    // Keeping captured point at it place
+    centerX = mouseX - captureX*scale;
+    centerY = mouseY - captureY*scale;
+    // logger.additional("Press at %f : %f, get at %f : %f", mouseX, mouseY, centerX, centerY);
 }
 
 void Grid::click(float mouseX, float mouseY) {
-    capture = true;
     captureX = (mouseX - centerX)/scale;
     captureY = (mouseY - centerY)/scale;
     logger.additional("Press at %f : %f, get at %f : %f", mouseX, mouseY, captureX, captureY);
-}
-
-void Grid::unClick(float _mouseX, float _mouseY) {
-    capture = false;
 }
 
 void Grid::zoom(float _wheelY, const Mouse _mouse) {
