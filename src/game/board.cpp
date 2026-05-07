@@ -15,6 +15,8 @@ void Board::reset() {
     for (int i=0; i < height*width; ++i) {
         cells[i].reset();
     }
+    // Copying to temp array
+    memcpy(tempCells, cells, sizeof(tempCells));
 }
 
 int Board::getWidth() const {
@@ -34,7 +36,26 @@ void Board::applyTemperature(SDL_Point _pos, float _temperature) {
 }
 
 void Board::update() {
-    Cell newCells[height*width];
+    // Vertical interactions
+    for (int y=0; y < height-1; ++y) {
+        for (int x=0; x < width; ++x) {
+            // Exchanging with cell bellow
+            cells[y*width+x].exchange(cells[(y+1)*width+x],
+                tempCells[y*width+x], tempCells[(y+1)*width+x]);
+        }
+    }
+
+    // Horizontal interactions
+    for (int y=0; y < height; ++y) {
+        for (int x=0; x < width-1; ++x) {
+            // Exchanging with cell right to it
+            cells[y*width+x].exchange(cells[y*width+x+1],
+                tempCells[y*width+x], tempCells[y*width+x+1]);
+        }
+    }
+
+    // Copying saved array to main
+    memcpy(cells, tempCells, sizeof(cells));
 }
 
 void Board::blitNormal(const Window& _window, SDL_FRect _cellRect) const {

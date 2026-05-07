@@ -69,12 +69,15 @@ void BoardInteracter::update(const Mouse _mouse) {
         SDL_Point position = {int((_mouse.getX()-rect.x)/rect.w), int((_mouse.getY()-rect.y)/rect.h)};
 
         if (mousePress == SDL_BUTTON_LMASK) {
-            board.applyPressure(position, 1.0);
+            board.applyPressure(position, 10.0);
         }
         if (mousePress == SDL_BUTTON_RMASK) {
-            board.applyTemperature(position, 1.0);
+            board.applyTemperature(position, 100.0);
         }
     }
+
+    // Updating physic
+    board.update();
 }
 
 void BoardInteracter::blit() const {

@@ -1,1 +1,1 @@
-zip -9r build/data-billiard.dat ani/* img/* mus/* snd/* fnt/*
+zip -9r build/data-thermal.dat ani/* img/* mus/* snd/* fnt/*

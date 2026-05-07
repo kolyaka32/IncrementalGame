@@ -22,6 +22,11 @@ class Cell {
     };
 
  private:
+    // Constants
+    static constexpr float pressureKoef = 0.01;
+    static constexpr float temperatureKoef = 0.0;
+
+    // Variaables per cell
     State state = Air;
     float pressure;
     float temperature;
@@ -31,7 +36,7 @@ class Cell {
     void reset();
 
     // Interactions
-    void update(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to nother place
+    void exchange(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to nother place
     void applyPressure(float pressure);
     void applyTemperature(float temperature);
 

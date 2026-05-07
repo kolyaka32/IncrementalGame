@@ -9,7 +9,7 @@
 // Main function
 int main(int argv, char **args) {
     // Creating main window
-    Window window{1200, 900, {"Indenter", "Индентер"}};
+    Window window{1200, 900, {"Thermal", "Температурный"}};
 
     // Running menu
     App::run(window);

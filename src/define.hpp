@@ -31,18 +31,18 @@
 
 
 // System game name
-#define WINDOW_NAME "Incremental"
+#define WINDOW_NAME "Thermal"
 #define LOG_NAME "log.txt"
 
 // Base file names
 // File with all GFX
 #if (PRELOAD_DATA)
-#define DATA_FILE "data-incremental.dat"
+#define DATA_FILE "data-thermal.dat"
 #endif
 
 // File with all saved data (language, settings, volumes...)
 #if (USE_SETTING_FILE)
-#define SETTING_FILE "settings-incremental.ini"
+#define SETTING_FILE "settings-thermal.ini"
 #endif
 
 // Number of active connections in internet part
