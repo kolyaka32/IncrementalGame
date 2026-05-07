@@ -17,11 +17,16 @@ boardBackground{cellRect.x, cellRect.y, cellRect.w*board.getWidth(), cellRect.h*
 panelBackplate(_window, _panelW/2, 0.5, _panelW, 1.0, 2.0, GREY, BLACK),
 modeText(_window, _panelW/2, 0.15, {"Show mode:", "Режим отображения:"}, 1),
 modeSwitchBox(_window, _panelW/2, 0.2, 0.2, {{"Elements", "Элементы"},
-    {"Thermal", "Температурный"}, {"Pressure", "Давление"}}) {}
+    {"Thermal", "Температурный"}, {"Pressure", "Давление"}}),
+pickedPressure(_window, _panelW/2, 0.4, {"Pressure:%f", "Давление:%f"}, Height::Main, BLACK),
+pickedTemperature(_window, _panelW/2, 0.45, {"Temperature:%.1f", "Температура:%.1f"}, Height::Main, BLACK),
+resetButton(_window, _panelW/2, 0.6, {"Reset", "Сброс"}) {}
 
 void BoardInteracter::reset() {
     board.reset();
     mousePress = 0;
+    pickedPressure.setValues(0.0f);
+    pickedTemperature.setValues(0.0f);
 }
 
 void BoardInteracter::click(const Mouse _mouse) {
@@ -30,6 +35,11 @@ void BoardInteracter::click(const Mouse _mouse) {
         // Check, if changing show mode
         if (modeSwitchBox.click(_mouse)) {
             state = ShowState(modeSwitchBox.getValue());
+            return;
+        }
+        // Check, if reset
+        if (resetButton.in(_mouse)) {
+            board.reset();
             return;
         }
         // Check, if dragging item
@@ -69,11 +79,22 @@ void BoardInteracter::update(const Mouse _mouse) {
         SDL_Point position = {int((_mouse.getX()-rect.x)/rect.w), int((_mouse.getY()-rect.y)/rect.h)};
 
         if (mousePress == SDL_BUTTON_LMASK) {
-            board.applyPressure(position, 10.0);
+            board.applyPressure(position, 0.5);
         }
         if (mousePress == SDL_BUTTON_RMASK) {
-            board.applyTemperature(position, 100.0);
+            board.applyTemperature(position, 10.0);
         }
+        if (mousePress == SDL_BUTTON_X1MASK) {
+            board.applyPressure(position, -4.0);
+        }
+        if (mousePress == SDL_BUTTON_X2MASK) {
+            board.applyTemperature(position, -10.0);
+        }
+        pickedPressure.setValues(board.getPressure(position));
+        pickedTemperature.setValues(board.getTemperature(position));
+    } else {
+        pickedPressure.setValues(0.0f);
+        pickedTemperature.setValues(0.0f);
     }
 
     // Updating physic
@@ -107,4 +128,7 @@ void BoardInteracter::blit() const {
     panelBackplate.blit();
     modeText.blit();
     modeSwitchBox.blit();
+    pickedPressure.blit();
+    pickedTemperature.blit();
+    resetButton.blit();
 }

@@ -29,10 +29,20 @@ int Board::getHeight() const {
 
 void Board::applyPressure(SDL_Point _pos, float _pressure) {
     cells[_pos.y*width+_pos.x].applyPressure(_pressure);
+    tempCells[_pos.y*width+_pos.x].applyPressure(_pressure);
 }
 
 void Board::applyTemperature(SDL_Point _pos, float _temperature) {
     cells[_pos.y*width+_pos.x].applyTemperature(_temperature);
+    tempCells[_pos.y*width+_pos.x].applyTemperature(_temperature);
+}
+
+float Board::getPressure(SDL_Point _pos) const {
+    return cells[_pos.y*width+_pos.x].getPressure();
+}
+
+float Board::getTemperature(SDL_Point _pos) const {
+    return cells[_pos.y*width+_pos.x].getTemperature();
 }
 
 void Board::update() {

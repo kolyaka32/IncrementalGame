@@ -31,6 +31,9 @@ private:
     GUI::RectBackplate panelBackplate;
     GUI::HighlightedStaticText modeText;
     GUI::SwitchBox modeSwitchBox;
+    GUI::DynamicText pickedPressure;
+    GUI::DynamicText pickedTemperature;
+    GUI::TextButton resetButton;
 
 public:
     BoardInteracter(const Window& window, float boardX, float boardY, float panelW);
