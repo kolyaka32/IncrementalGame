@@ -28,8 +28,9 @@ enum class Textures : unsigned {
     //FlagBEL,
 
     // Main game part
-    //Ball,
-    //Board,
+    Wall,
+    Vent,
+    Heater,
 
     // Global counter of all textures
     Count,
