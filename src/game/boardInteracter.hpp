@@ -27,12 +27,18 @@ private:
     const SDL_FRect cellRect;
     const SDL_FRect boardBackground;
 
+    // Selected object
+    Cell holdingCell;
+    SDL_FRect holdingCellRect;
+
     // Graphical part
     GUI::RectBackplate panelBackplate;
     GUI::HighlightedStaticText modeText;
     GUI::SwitchBox modeSwitchBox;
     GUI::DynamicText pickedPressure;
     GUI::DynamicText pickedTemperature;
+    GUI::HighlightedStaticText buildText;
+    GUI::SwitchBox buildSwitchBox;
     GUI::TextButton resetButton;
 
 public:
@@ -45,6 +51,7 @@ public:
     void update(const Mouse mouse);
     void unclick(const Mouse mouse);
     void scroll(const Mouse mouse, float wheelY);
+    bool press(SDL_Keycode key);
 
     void blit() const;
 };

@@ -13,6 +13,7 @@ board(_window, 0.26, 0.05, 0.25) {
         // Resetting field
         board.reset();
     }
+    logger.additional("Start game cycle");
 }
 
 bool GameCycle::inputMouseDown() {
@@ -36,9 +37,8 @@ void GameCycle::inputMouseWheel(float _wheelY) {
 }
 
 void GameCycle::inputKeys(SDL_Keycode _key) {
-    // Quiting to menu
-    if (_key == SDLK_Q) {
-        stop();
+    if (board.press(_key)) {
+        return;
     }
     if (_key == SDLK_ESCAPE) {
         // Closing top open object

@@ -22,12 +22,20 @@ bool Cell::isVent() const {
     return state & stateMask == VentUp;
 }
 
+void Cell::setState(int _state) {
+    state = _state;
+}
+
 void Cell::applyPressure(float _pressure) {
-    pressure *= SDL_pow(2, _pressure);
+    if (!isWall()) {
+        pressure *= SDL_pow(2, _pressure);
+    }
 }
 
 void Cell::applyTemperature(float _temperature) {
-    temperature += _temperature;
+    if (!isWall()) {
+        temperature += _temperature;
+    }
 }
 
 float Cell::getPressure() const {
@@ -121,7 +129,11 @@ void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {
     case VentLeft:
         _window.blit(_window.getTexture(Textures::Vent), 270.0, _rect);
         break;
-    
+
+    case Buldozer:
+        _window.blit(_window.getTexture(Textures::Buldozer), _rect);
+        break;
+
     default:
         break;
     }

@@ -23,7 +23,6 @@ class Grid {
     void reset();
 
     void click(float mouseX, float mouseY);
-    void unClick(float mouseX, float mouseY);
     void zoom(float wheelY, const Mouse mouse);
     void update(float mouseX, float mouseY);
 

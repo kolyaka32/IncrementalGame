@@ -66,7 +66,7 @@ void GUI::SwitchBox::set(unsigned _value) {
     }
 }
 
-unsigned GUI::SwitchBox::getValue() {
+unsigned GUI::SwitchBox::getValue() const {
     return selected;
 }
 

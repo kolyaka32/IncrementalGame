@@ -14,11 +14,6 @@ class Cell {
  public:
     // Masks for state interaction
     typedef Uint8 CellState;  // Type for storing cell state
-    // State defines as 1 bit for air throwput, 2 bits for type, 2 bits for rotation
-    static const CellState wallMask     = 0b10000;
-    static const CellState typeMask     = 0b01100;
-    static const CellState stateMask    = 0b01100;
-    static const CellState rotationMask = 0b10011;
 
     // Possible states of cell
     enum State : CellState {
@@ -33,9 +28,18 @@ class Cell {
         VentRight = 0b10101,
         VentDown  = 0b10110,
         VentLeft  = 0b10111,
+
+        // Special
+        Buldozer  = 0b11111111,
     };
 
- private:
+ protected:
+    // State defines as 1 bit for air throwput, 2 bits for type, 2 bits for rotation
+    static const CellState wallMask     = 0b10000;
+    static const CellState typeMask     = 0b01100;
+    static const CellState stateMask    = 0b01100;
+    static const CellState rotationMask = 0b10011;
+
     // Constants
     static constexpr float pressureKoef = 0.1;
     static constexpr float temperatureKoef = 0.1;
@@ -46,16 +50,16 @@ class Cell {
     float pressure;
     float temperature;
 
- protected:
-     // Check state
-     bool isWall() const;  // Return, if air can't came throw
-     bool isVent() const;  // Return, if this is vent
+    // Check state
+    bool isWall() const;  // Return, if air can't came throw
+    bool isVent() const;  // Return, if this is vent
 
  public:
     Cell();
     void reset();
 
     // Interactions
+    void setState(int state);
     void applyPressure(float pressure);
     void applyTemperature(float temperature);
     float getPressure() const;

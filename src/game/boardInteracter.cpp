@@ -14,13 +14,18 @@ BoardInteracter::BoardInteracter(const Window& _window, float _boardX, float _bo
 : Template(_window),
 cellRect{_boardX*_window.getWidth(), _boardY*_window.getHeight(), 40.0f, 40.0f},
 boardBackground{cellRect.x, cellRect.y, cellRect.w*board.getWidth(), cellRect.h*board.getHeight()},
+holdingCell{},
+holdingCellRect{0.0f, 0.0f, cellRect.w, cellRect.h},
 panelBackplate(_window, _panelW/2, 0.5, _panelW, 1.0, 2.0, GREY, BLACK),
 modeText(_window, _panelW/2, 0.15, {"Show mode:", "Режим отображения:"}, 1),
-modeSwitchBox(_window, _panelW/2, 0.2, 0.2, {{"Elements", "Элементы"},
+modeSwitchBox(_window, _panelW/2, 0.185, 0.2, {{"Elements", "Элементы"},
     {"Thermal", "Температурный"}, {"Pressure", "Давление"}}),
-pickedPressure(_window, _panelW/2, 0.4, {"Pressure:%f", "Давление:%f"}, Height::Main, BLACK),
-pickedTemperature(_window, _panelW/2, 0.45, {"Temperature:%.1f", "Температура:%.1f"}, Height::Main, BLACK),
-resetButton(_window, _panelW/2, 0.6, {"Reset", "Сброс"}) {}
+pickedPressure(_window, _panelW/2, 0.3, {"Pressure:%f", "Давление:%f"}, Height::Main, BLACK),
+pickedTemperature(_window, _panelW/2, 0.33, {"Temperature:%.1f", "Температура:%.1f"}, Height::Main, BLACK),
+buildText(_window, _panelW/2, 0.5, {"Build object:", "Объект постройки:"}, 1),
+buildSwitchBox(_window, _panelW/2, 0.535, 0.2, {{"Not selected", "Не выбран"},
+    {"Demplish", "Снести"}, {"Wall", "Стена"}, {"Vent", "Вентилятор"}, {"Heater", "Нагреватель"}}),
+resetButton(_window, _panelW/2, 0.8, {"Reset", "Сброс"}) {}
 
 void BoardInteracter::reset() {
     board.reset();
@@ -35,15 +40,36 @@ void BoardInteracter::click(const Mouse _mouse) {
         // Check, if changing show mode
         if (modeSwitchBox.click(_mouse)) {
             state = ShowState(modeSwitchBox.getValue());
-            return;
+        }
+        // Update building menu
+        if (buildSwitchBox.click(_mouse)) {
+            // Selecting holding cell
+            switch (buildSwitchBox.getValue()) {
+            case 1:
+                holdingCell.setState(Cell::Buldozer);
+                break;
+
+            case 2:
+                holdingCell.setState(Cell::Wall);
+                break;
+
+            case 3:
+                holdingCell.setState(Cell::VentUp);
+                break;
+
+            case 4:
+                holdingCell.setState(Cell::Heater);
+                break;
+
+            default:
+                break;
+            }
         }
         // Check, if reset
         if (resetButton.in(_mouse)) {
             board.reset();
             return;
         }
-        // Check, if dragging item
-        // !
         return;
     }
     // Check, if start interaction
@@ -64,7 +90,24 @@ void BoardInteracter::scroll(const Mouse _mouse, float _wheelY) {
     grid.zoom(_wheelY, _mouse);
 }
 
+bool BoardInteracter::press(SDL_Keycode _key) {
+    if (_key == SDLK_ESCAPE) {
+        // Check, if escape from any of submenus
+        if (buildSwitchBox.getValue() != 0) {
+            buildSwitchBox.set(0);
+            return true;
+        }
+    }
+    return false;
+}
+
 void BoardInteracter::update(const Mouse _mouse) {
+    // Check, if building
+    if (buildSwitchBox.getValue() != 0) {
+        holdingCellRect.x = _mouse.getX() - holdingCellRect.w/2;
+        holdingCellRect.y = _mouse.getY() - holdingCellRect.h/2;
+    }
+
     if (mousePress == SDL_BUTTON_MMASK) {
         grid.update(_mouse.getX(), _mouse.getY());
     }
@@ -78,18 +121,50 @@ void BoardInteracter::update(const Mouse _mouse) {
         const SDL_FRect rect = grid.absolute(cellRect);
         SDL_Point position = {int((_mouse.getX()-rect.x)/rect.w), int((_mouse.getY()-rect.y)/rect.h)};
 
-        if (mousePress == SDL_BUTTON_LMASK) {
-            board.applyPressure(position, 0.5);
-        }
-        if (mousePress == SDL_BUTTON_RMASK) {
+        // Check pressing on field
+        switch (mousePress) {
+        case SDL_BUTTON_LMASK:
+            // Check, if try to do build
+            switch (buildSwitchBox.getValue()) {
+            case 1:
+                board.setCell(position, Cell::Air);
+                board.resetCell(position);
+                break;
+
+            case 2:
+                board.setCell(position, Cell::Wall);
+                break;
+
+            case 3:
+                board.setCell(position, Cell::VentUp);
+                break;
+
+            case 4:
+                board.setCell(position, Cell::Heater);
+                break;
+
+            default:
+                board.applyPressure(position, 0.5);
+                break;
+            }
+            break;
+
+        case SDL_BUTTON_RMASK:
             board.applyTemperature(position, 10.0);
-        }
-        if (mousePress == SDL_BUTTON_X1MASK) {
+            break;
+
+        case SDL_BUTTON_X1MASK:
             board.applyPressure(position, -4.0);
-        }
-        if (mousePress == SDL_BUTTON_X2MASK) {
+            break;
+
+        case SDL_BUTTON_X2MASK:
             board.applyTemperature(position, -10.0);
+            break;
+        
+        default:
+            break;
         }
+        // Update showing parameter
         pickedPressure.setValues(board.getPressure(position));
         pickedTemperature.setValues(board.getTemperature(position));
     } else {
@@ -124,11 +199,18 @@ void BoardInteracter::blit() const {
     }
     board.blitLines(window, rect);
 
-    // Paanel interface
+    // Panel interface
     panelBackplate.blit();
     modeText.blit();
     modeSwitchBox.blit();
     pickedPressure.blit();
     pickedTemperature.blit();
+    buildText.blit();
+    buildSwitchBox.blit();
     resetButton.blit();
+
+    // Building
+    if (buildSwitchBox.getValue() != 0) {
+        holdingCell.blitNormal(window, holdingCellRect);
+    }
 }

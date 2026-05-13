@@ -27,6 +27,16 @@ int Board::getHeight() const {
     return height;
 }
 
+void Board::setCell(SDL_Point _pos, Cell::CellState _state) {
+    cells[_pos.y*width+_pos.x].setState(_state);
+    tempCells[_pos.y*width+_pos.x].setState(_state);
+}
+
+void Board::resetCell(SDL_Point _pos) {
+    cells[_pos.y*width+_pos.x].reset();
+    tempCells[_pos.y*width+_pos.x].reset();
+}
+
 void Board::applyPressure(SDL_Point _pos, float _pressure) {
     cells[_pos.y*width+_pos.x].applyPressure(_pressure);
     tempCells[_pos.y*width+_pos.x].applyPressure(_pressure);

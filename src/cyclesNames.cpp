@@ -11,7 +11,7 @@
 Cycle App::nextCycle = Cycle::Main;
 
 void App::run(Window& _window) {
-    logger.additional("\nStart selecting loop");
+    logger.additional("\nStart app");
 
     // Starting loop of selecting cycles
     while (running) {

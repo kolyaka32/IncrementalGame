@@ -286,7 +286,7 @@ namespace GUI {
             unsigned startOption = 0, float size = Height::Main, Color backColor = WHITE, Color frontColor = BLACK);
         // Getter/setter
         void set(unsigned value);
-        unsigned getValue();
+        unsigned getValue() const;
 
         bool click(const Mouse mouse);  // return true, when entered new value
         void blit() const override;

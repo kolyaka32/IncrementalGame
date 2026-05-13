@@ -31,6 +31,7 @@ enum class Textures : unsigned {
     Wall,
     Vent,
     Heater,
+    Buldozer,
 
     // Global counter of all textures
     Count,
