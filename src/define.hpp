@@ -31,18 +31,18 @@
 
 
 // System game name
-#define WINDOW_NAME "Thermal"
+#define WINDOW_NAME "ATMOS"
 #define LOG_NAME "log.txt"
 
 // Base file names
 // File with all GFX
 #if (PRELOAD_DATA)
-#define DATA_FILE "data-thermal.dat"
+#define DATA_FILE "data-ATMOS.dat"
 #endif
 
 // File with all saved data (language, settings, volumes...)
 #if (USE_SETTING_FILE)
-#define SETTING_FILE "settings-thermal.ini"
+#define SETTING_FILE "settings-ATMOS.ini"
 #endif
 
 // Number of active connections in internet part
