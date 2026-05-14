@@ -141,8 +141,13 @@ void Window::blit(SDL_Texture* _texture, const SDL_FRect* _dest, const SDL_FRect
 }
 
 void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _dest,
-    const SDL_FRect* _src, SDL_FPoint _center, SDL_FlipMode _flipMode) const {
-    SDL_RenderTextureRotated(renderer, _texture, _src, &_dest, _angle, &_center, _flipMode);
+    const SDL_FRect* _src, SDL_FlipMode _flipMode) const {
+    SDL_RenderTextureRotated(renderer, _texture, _src, &_dest, _angle, nullptr, _flipMode);
+}
+
+void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _rect, SDL_FPoint _center,
+    const SDL_FRect* _src, SDL_FlipMode _flipMode) const {
+    SDL_RenderTextureRotated(renderer, _texture, _src, &_rect, _angle, &_center, _flipMode);
 }
 
 void Window::setRenderTarget(SDL_Texture* _target) const {

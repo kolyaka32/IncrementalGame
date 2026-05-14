@@ -91,6 +91,30 @@ void BoardInteracter::scroll(const Mouse _mouse, float _wheelY) {
 }
 
 bool BoardInteracter::press(SDL_Keycode _key) {
+    if (_key == SDLK_R) {
+        // Check, if try rotate part
+        switch (holdingCell.state) {
+        case Cell::VentUp:
+            holdingCell.state = Cell::VentRight;
+            break;
+
+        case Cell::VentRight:
+            holdingCell.state = Cell::VentDown;
+            break;
+
+        case Cell::VentDown:
+            holdingCell.state = Cell::VentLeft;
+            break;
+
+        case Cell::VentLeft:
+            holdingCell.state = Cell::VentUp;
+            break;
+
+        default:
+            break;
+        }
+        return true;
+    }
     if (_key == SDLK_ESCAPE) {
         // Check, if escape from any of submenus
         if (buildSwitchBox.getValue() != 0) {
@@ -132,15 +156,9 @@ void BoardInteracter::update(const Mouse _mouse) {
                 break;
 
             case 2:
-                board.setCell(position, Cell::Wall);
-                break;
-
             case 3:
-                board.setCell(position, Cell::VentUp);
-                break;
-
             case 4:
-                board.setCell(position, Cell::Heater);
+                board.setCell(position, holdingCell.state);
                 break;
 
             default:

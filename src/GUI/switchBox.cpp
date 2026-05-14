@@ -108,7 +108,7 @@ void GUI::SwitchBox::blit() const {
         for (int i=0; i < drawnTexts.size(); ++i) {
             drawnTexts[i].blit();
         }
-        window.blit(arrowTexture, 0.0f, arrowRect, nullptr, {0, 0}, SDL_FLIP_VERTICAL);
+        window.blit(arrowTexture, 0.0f, arrowRect, nullptr, SDL_FLIP_VERTICAL);
     } else {
         drawnTexts[selected].blit();
         window.blit(arrowTexture, arrowRect);

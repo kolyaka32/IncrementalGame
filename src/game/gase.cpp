@@ -52,12 +52,12 @@ void Gase::exchange(const Gase& _src2, Gase& _dst1, Gase& _dst2) const {
 }
 
 void Gase::vent(const Gase& _srcOut, Gase& _dstIn, Gase& _dstOut, float _power) const {
-    float delta = _srcOut.pressure * _power;
+    float delta = pressure * _power;
 
     // Check for not pumping to vacum
     if (delta > 0.1) {
         // Change dest pressure
-        _dstOut.temperature = (_srcOut.pressure*temperature + delta*temperature) / (_srcOut.pressure+delta);
+        _dstOut.temperature = (_srcOut.pressure*_srcOut.temperature + delta*temperature) / (_srcOut.pressure+delta);
 
         // Change pressure
         _dstIn.pressure -= delta;
