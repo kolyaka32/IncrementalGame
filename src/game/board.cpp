@@ -28,8 +28,8 @@ int Board::getHeight() const {
 }
 
 void Board::setCell(SDL_Point _pos, Cell::CellState _state) {
-    cells[_pos.y*width+_pos.x].setState(_state);
-    tempCells[_pos.y*width+_pos.x].setState(_state);
+    cells[_pos.y*width+_pos.x].state = _state;
+    tempCells[_pos.y*width+_pos.x].state = _state;
 }
 
 void Board::resetCell(SDL_Point _pos) {

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../data/app.hpp"
+#include "gase.hpp"
 #include "navigation.hpp"
 
 
@@ -33,6 +33,9 @@ class Cell {
         Buldozer  = 0b11111111,
     };
 
+    // Represent object (from State)
+    Uint8 state = Air;
+
  protected:
     // State defines as 1 bit for air throwput, 2 bits for type, 2 bits for rotation
     static const CellState wallMask     = 0b10000;
@@ -40,15 +43,8 @@ class Cell {
     static const CellState stateMask    = 0b01100;
     static const CellState rotationMask = 0b10011;
 
-    // Constants
-    static constexpr float pressureKoef = 0.1;
-    static constexpr float temperatureKoef = 0.1;
-    static constexpr float heatTarget = 200.0;
-
-    // Variaables per cell
-    Uint8 state = Air;
-    float pressure;
-    float temperature;
+    // Variables per cell
+    Gase gase;
 
     // Check state
     bool isWall() const;  // Return, if air can't came throw
@@ -59,7 +55,6 @@ class Cell {
     void reset();
 
     // Interactions
-    void setState(int state);
     void applyPressure(float pressure);
     void applyTemperature(float temperature);
     float getPressure() const;
@@ -67,7 +62,6 @@ class Cell {
 
     // Every cycle update
     void exchange(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to new place
-    void update();
 
     // Drawing
     void blitNormal(const Window& window, SDL_FRect rect) const;

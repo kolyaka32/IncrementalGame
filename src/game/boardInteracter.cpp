@@ -46,19 +46,19 @@ void BoardInteracter::click(const Mouse _mouse) {
             // Selecting holding cell
             switch (buildSwitchBox.getValue()) {
             case 1:
-                holdingCell.setState(Cell::Buldozer);
+                holdingCell.state = Cell::Buldozer;
                 break;
 
             case 2:
-                holdingCell.setState(Cell::Wall);
+                holdingCell.state = Cell::Wall;
                 break;
 
             case 3:
-                holdingCell.setState(Cell::VentUp);
+                holdingCell.state = Cell::VentUp;
                 break;
 
             case 4:
-                holdingCell.setState(Cell::Heater);
+                holdingCell.state = Cell::Heater;
                 break;
 
             default:
@@ -144,7 +144,7 @@ void BoardInteracter::update(const Mouse _mouse) {
                 break;
 
             default:
-                board.applyPressure(position, 0.5);
+                board.applyPressure(position, 0.2);
                 break;
             }
             break;
