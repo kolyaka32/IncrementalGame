@@ -78,8 +78,8 @@ void Board::update() {
         for (int x=0; x < width; ++x) {
             switch (cells[y*width+x].state) {
             case Cell::VentUp:
-                cells[y*width+x].vent(cells[(y-1)*width+x], cells[(y+1)*width+x],
-                    tempCells[(y-1)*width+x], tempCells[(y+1)*width+x]);
+                cells[y*width+x].vent(cells[(y+1)*width+x], cells[(y-1)*width+x],
+                    tempCells[(y+1)*width+x], tempCells[(y-1)*width+x]);
                 break;
 
             case Cell::VentRight:
@@ -88,8 +88,8 @@ void Board::update() {
                 break;
 
             case Cell::VentDown:
-                cells[y*width+x].vent(cells[(y+1)*width+x], cells[(y-1)*width+x],
-                    tempCells[(y+1)*width+x], tempCells[(y-1)*width+x]);
+                cells[y*width+x].vent(cells[(y-1)*width+x], cells[(y+1)*width+x],
+                    tempCells[(y-1)*width+x], tempCells[(y+1)*width+x]);
                 break;
 
             case Cell::VentLeft:
