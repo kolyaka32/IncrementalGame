@@ -74,6 +74,49 @@ void Board::update() {
         }
     }
 
+    // Updating cells by it special behevior
+    for (int y=0; y < height; ++y) {
+        for (int x=0; x < width; ++x) {
+            switch (cells[y*width+x].state) {
+            case Cell::VentUp:
+                cells[y*width+x].vent(cells[(y-1)*width+x], cells[(y+1)*width+x],
+                    tempCells[(y-1)*width+x], tempCells[(y+1)*width+x]);
+                break;
+
+            case Cell::VentRight:
+                cells[y*width+x].vent(cells[y*width+x-1], cells[y*width+x+1],
+                    tempCells[y*width+x-1], tempCells[y*width+x+1]);
+                break;
+
+            case Cell::VentDown:
+                cells[y*width+x].vent(cells[(y+1)*width+x], cells[(y-1)*width+x],
+                    tempCells[(y+1)*width+x], tempCells[(y-1)*width+x]);
+                break;
+
+            case Cell::VentLeft:
+                cells[y*width+x].vent(cells[y*width+x-1], cells[y*width+x+1],
+                    tempCells[y*width+x-1], tempCells[y*width+x+1]);
+                break;
+
+            case Cell::Heater:
+                cells[y*width+x].heatUpTo(tempCells[y*width+x], 200);
+
+            default:
+                break;
+            }
+        }
+    }
+
+    // Resetting side cells to room temperature
+    for (int y=0; y < height; ++y) {
+        /*tempCells[y*width].reset();
+        tempCells[y*width+width-1].reset();*/
+    }
+    for (int x=0; x < width-1; ++x) {
+        /*tempCells[x].reset();
+        tempCells[height*width-x].reset();*/
+    }
+
     // Copying saved array to main
     memcpy(cells, tempCells, sizeof(cells));
 }

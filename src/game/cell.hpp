@@ -57,11 +57,13 @@ class Cell {
     // Interactions
     void applyPressure(float pressure);
     void applyTemperature(float temperature);
+    void heatUpTo(Cell& dest, float targetTemp) const;
     float getPressure() const;
     float getTemperature() const;
 
     // Every cycle update
     void exchange(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to new place
+    void vent(const Cell& srcIn, const Cell& srcOut, Cell& dstIn, Cell& dstOut) const;
 
     // Drawing
     void blitNormal(const Window& window, SDL_FRect rect) const;

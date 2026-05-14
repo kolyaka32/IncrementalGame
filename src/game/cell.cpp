@@ -33,6 +33,10 @@ void Cell::applyTemperature(float _temperature) {
     }
 }
 
+void Cell::heatUpTo(Cell& _dest, float _targetTemp) const {
+    gase.heatUpTo(_dest.gase, _targetTemp);
+}
+
 float Cell::getPressure() const {
     return gase.getPressure();
 }
@@ -44,6 +48,12 @@ float Cell::getTemperature() const {
 void Cell::exchange(const Cell& _src2, Cell& _dst1, Cell& _dst2) const {
     if (!isWall() && !_src2.isWall()) {
         gase.exchange(_src2.gase, _dst1.gase, _dst2.gase);
+    }
+}
+
+void Cell::vent(const Cell& _srcIn, const Cell& _srcOut, Cell& _dstIn, Cell& _dstOut) const {
+    if (!_srcIn.isWall() && !_srcOut.isWall()) {
+        _srcIn.gase.vent(_srcOut.gase, _dstIn.gase, _dstOut.gase, 0.1);
     }
 }
 

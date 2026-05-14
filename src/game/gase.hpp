@@ -27,12 +27,15 @@ public:
 
     void applyPressure(float pressure);
     void applyTemperature(float changeTemperature);
-    void heatUpTo(float targetTemp);
+    void heatUpTo(Gase& dest, float targetTemp) const;
     float getPressure() const;
     float getTemperature() const;
 
     // Interact between 2 cell with saving to new place
     void exchange(const Gase& src2, Gase& dst1, Gase& dst2) const;
+
+    // Take air from current cell to outlet
+    void vent(const Gase& srcOut, Gase& dstIn, Gase& dstOut, float power) const;
 
     // Drawing
     void blitThermal(const Window& window, SDL_FRect rect) const;
