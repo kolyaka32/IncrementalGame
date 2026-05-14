@@ -6,6 +6,7 @@
 #pragma once
 
 #include "../GUI/interface.hpp"
+#include "navigation.hpp"
 #include "board.hpp"
 
 
@@ -25,7 +26,6 @@ private:
 
     // Rects of local positions of board
     const SDL_FRect cellRect;
-    const SDL_FRect boardBackground;
 
     // Selected object
     Cell holdingCell;

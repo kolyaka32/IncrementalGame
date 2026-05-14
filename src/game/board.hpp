@@ -28,8 +28,11 @@ class Board {
     void applyTemperature(SDL_Point pos, float temperature);
     float getPressure(SDL_Point pos) const;
     float getTemperature(SDL_Point pos) const;
+
+    // Every cycle update
     void update();
 
+    // Draw different modes/parts
     void blitNormal(const Window& window, SDL_FRect cellRect) const;
     void blitThermal(const Window& window, SDL_FRect cellRect) const;
     void blitPressure(const Window& window, SDL_FRect cellRect) const;

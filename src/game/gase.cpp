@@ -6,11 +6,15 @@
 #include "gase.hpp"
 
 
+// Default world parameters
+float Gase::globalPressure = 1.0;
+float Gase::globalTemperature = 20.0;
+
 Gase::Gase() {}
 
 void Gase::reset() {
-    pressure = 1.0;
-    temperature = 20.0;
+    pressure = globalPressure;
+    temperature = globalTemperature;
 }
 
 void Gase::applyPressure(float _pressure) {
@@ -32,6 +36,20 @@ float Gase::getPressure() const {
 
 float Gase::getTemperature() const {
     return temperature;
+}
+
+void Gase::exchange(Gase& _dest) const {
+    // Calculating difference (signed)
+    float diff = pressure - globalPressure;
+    float velocity = diff * pressureKoef;
+
+    // Changing temperture
+    if (velocity < 0) {
+        _dest.temperature = (pressure*temperature-velocity*globalTemperature) / (pressure-velocity);
+    }
+
+    // Changing pressure
+    _dest.pressure -= velocity;
 }
 
 void Gase::exchange(const Gase& _src2, Gase& _dst1, Gase& _dst2) const {

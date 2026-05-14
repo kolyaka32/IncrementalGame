@@ -51,9 +51,15 @@ void Cell::exchange(const Cell& _src2, Cell& _dst1, Cell& _dst2) const {
     }
 }
 
+void Cell::exchange(Cell& _dest) const {
+    if (!isWall()) {
+        gase.exchange(_dest.gase);
+    }
+}
+
 void Cell::vent(const Cell& _srcIn, const Cell& _srcOut, Cell& _dstIn, Cell& _dstOut) const {
     if (!_srcIn.isWall() && !_srcOut.isWall()) {
-        _srcIn.gase.vent(_srcOut.gase, _dstIn.gase, _dstOut.gase, 0.1);
+        _srcIn.gase.vent(_srcOut.gase, _dstIn.gase, _dstOut.gase, 0.2);
     }
 }
 

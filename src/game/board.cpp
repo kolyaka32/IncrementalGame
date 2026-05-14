@@ -11,7 +11,6 @@ Board::Board() {
 }
 
 void Board::reset() {
-    SDL_srand(getTime());
     for (int i=0; i < height*width; ++i) {
         cells[i].reset();
     }
@@ -20,30 +19,30 @@ void Board::reset() {
 }
 
 int Board::getWidth() const {
-    return width;
+    return width-2;
 }
 
 int Board::getHeight() const {
-    return height;
+    return height-2;
 }
 
 void Board::setCell(SDL_Point _pos, Cell::CellState _state) {
-    cells[_pos.y*width+_pos.x].state = _state;
+    //cells[_pos.y*width+_pos.x].state = _state;
     tempCells[_pos.y*width+_pos.x].state = _state;
 }
 
 void Board::resetCell(SDL_Point _pos) {
-    cells[_pos.y*width+_pos.x].reset();
+    //cells[_pos.y*width+_pos.x].reset();
     tempCells[_pos.y*width+_pos.x].reset();
 }
 
 void Board::applyPressure(SDL_Point _pos, float _pressure) {
-    cells[_pos.y*width+_pos.x].applyPressure(_pressure);
+    //cells[_pos.y*width+_pos.x].applyPressure(_pressure);
     tempCells[_pos.y*width+_pos.x].applyPressure(_pressure);
 }
 
 void Board::applyTemperature(SDL_Point _pos, float _temperature) {
-    cells[_pos.y*width+_pos.x].applyTemperature(_temperature);
+    //cells[_pos.y*width+_pos.x].applyTemperature(_temperature);
     tempCells[_pos.y*width+_pos.x].applyTemperature(_temperature);
 }
 
@@ -107,14 +106,14 @@ void Board::update() {
         }
     }
 
-    // Resetting side cells to room temperature
+    // Resetting side cells to global parameters
     for (int y=0; y < height; ++y) {
-        /*tempCells[y*width].reset();
-        tempCells[y*width+width-1].reset();*/
+        cells[y*width].exchange(tempCells[y*width]);
+        cells[y*width+width-1].exchange(tempCells[y*width+width-1]);
     }
     for (int x=0; x < width-1; ++x) {
-        /*tempCells[x].reset();
-        tempCells[height*width-x].reset();*/
+        cells[x].exchange(tempCells[x]);
+        cells[height*width-x].exchange(tempCells[height*width-x]);
     }
 
     // Copying saved array to main
@@ -122,34 +121,34 @@ void Board::update() {
 }
 
 void Board::blitNormal(const Window& _window, SDL_FRect _cellRect) const {
-    for (int y=0; y < height; ++y) {
-        for (int x=0; x < width; ++x) {
+    for (int y=1; y < height-1; ++y) {
+        for (int x=1; x < width-1; ++x) {
             cells[y*width+x].blitNormal(_window, _cellRect);
             _cellRect.x += _cellRect.w;
         }
-        _cellRect.x -= _cellRect.w * width;
+        _cellRect.x -= _cellRect.w * (width-2);
         _cellRect.y += _cellRect.h;
     }
 }
 
 void Board::blitThermal(const Window& _window, SDL_FRect _cellRect) const {
-    for (int y=0; y < height; ++y) {
-        for (int x=0; x < width; ++x) {
+    for (int y=1; y < height-1; ++y) {
+        for (int x=1; x < width-1; ++x) {
             cells[y*width+x].blitThermal(_window, _cellRect);
             _cellRect.x += _cellRect.w;
         }
-        _cellRect.x -= _cellRect.w * width;
+        _cellRect.x -= _cellRect.w * (width-2);
         _cellRect.y += _cellRect.h;
     }
 }
 
 void Board::blitPressure(const Window& _window, SDL_FRect _cellRect) const {
-    for (int y=0; y < height; ++y) {
-        for (int x=0; x < width; ++x) {
+    for (int y=1; y < height-1; ++y) {
+        for (int x=1; x < width-1; ++x) {
             cells[y*width+x].blitPressure(_window, _cellRect);
             _cellRect.x += _cellRect.w;
         }
-        _cellRect.x -= _cellRect.w * width;
+        _cellRect.x -= _cellRect.w * (width-2);
         _cellRect.y += _cellRect.h;
     }
 }
@@ -158,19 +157,19 @@ void Board::blitLines(const Window& _window, SDL_FRect _cellRect) const {
     // Draw separating lines
     _window.setDrawColor(BLACK);
     // Fining opposite side
-    const SDL_FPoint oppositeP = {_cellRect.x + _cellRect.w*width,
-        _cellRect.y + _cellRect.h*height};   
+    const SDL_FPoint oppositeP = {_cellRect.x + _cellRect.w*(width-2),
+        _cellRect.y + _cellRect.h*(height-2)};
 
     // Vertical lines
     float x = _cellRect.x;
-    for (int i=0; i <= width; ++i) {
+    for (int i=0; i < width-1; ++i) {
         _window.drawLine(x, _cellRect.y, x, oppositeP.y);
         x += _cellRect.w;
     }
 
     // Horizontal lines
     float y = _cellRect.y;
-    for (int i=0; i <= height; ++i) {
+    for (int i=0; i < height-1; ++i) {
         _window.drawLine(_cellRect.x, y, oppositeP.x, y);
         y += _cellRect.h;
     }

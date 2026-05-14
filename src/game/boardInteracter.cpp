@@ -13,7 +13,6 @@ ShowState BoardInteracter::state = ShowState::Normal;
 BoardInteracter::BoardInteracter(const Window& _window, float _boardX, float _boardY, float _panelW)
 : Template(_window),
 cellRect{_boardX*_window.getWidth(), _boardY*_window.getHeight(), 40.0f, 40.0f},
-boardBackground{cellRect.x, cellRect.y, cellRect.w*board.getWidth(), cellRect.h*board.getHeight()},
 holdingCell{},
 holdingCellRect{0.0f, 0.0f, cellRect.w, cellRect.h},
 panelBackplate(_window, _panelW/2, 0.5, _panelW, 1.0, 2.0, GREY, BLACK),
@@ -136,15 +135,13 @@ void BoardInteracter::update(const Mouse _mouse) {
         grid.update(_mouse.getX(), _mouse.getY());
     }
 
-    // Finding absolute position of background
-    SDL_FRect backgroundRect = grid.absolute(boardBackground);
+    // Finding connected cell
+    const SDL_FRect rect = grid.absolute(cellRect);
+    SDL_Point position = {int((_mouse.getX()-rect.x)/rect.w + 1), int((_mouse.getY()-rect.y)/rect.h + 1)};
 
-    // If click on field
-    if (_mouse.in(backgroundRect)) {
-        // Finding connected cell
-        const SDL_FRect rect = grid.absolute(cellRect);
-        SDL_Point position = {int((_mouse.getX()-rect.x)/rect.w), int((_mouse.getY()-rect.y)/rect.h)};
-
+    // Check, if in accessible area
+    if (position.x > 0 && position.x <= board.getWidth() &&
+        position.y > 0 && position.y <= board.getHeight()) {
         // Check pressing on field
         switch (mousePress) {
         case SDL_BUTTON_LMASK:
@@ -178,7 +175,7 @@ void BoardInteracter::update(const Mouse _mouse) {
         case SDL_BUTTON_X2MASK:
             board.applyTemperature(position, -10.0);
             break;
-        
+
         default:
             break;
         }

@@ -6,7 +6,6 @@
 #pragma once
 
 #include "gase.hpp"
-#include "navigation.hpp"
 
 
 //
@@ -63,6 +62,7 @@ class Cell {
 
     // Every cycle update
     void exchange(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to new place
+    void exchange(Cell& dest) const;  // Exchange without affect of second part (world)
     void vent(const Cell& srcIn, const Cell& srcOut, Cell& dstIn, Cell& dstOut) const;
 
     // Drawing
