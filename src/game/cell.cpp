@@ -14,20 +14,20 @@ void Cell::reset() {
 }
 
 bool Cell::isWall() const {
-    return state & wallMask;
+    return state & WALL_MASK;
 }
 
 bool Cell::isRotable() const {
-    return state & rotationMask;
+    return state & ROTATE_MASK;
 }
 
 void Cell::rotate() {
     // Check, if part rotatable
     if (isRotable()) {
         // Get new rotation
-        CellState rotation = (state & positionMask) + 1;
+        CellState rotation = (state & ANGLE_MASK) + 1;
         // Set it to state
-        state = (state & ~positionMask) | (rotation & positionMask);
+        state = (state & ~ANGLE_MASK) | (rotation & ANGLE_MASK);
     }
 }
 

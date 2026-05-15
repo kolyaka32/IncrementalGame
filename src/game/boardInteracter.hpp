@@ -21,7 +21,7 @@ enum class ShowState {
 class BoardInteracter : GUI::Template {
 private:
     static Board board;
-    static ShowState state;
+    static ShowState showState;
     int mousePress;  // State for pressing mouse from SDL_MouseButtonFlags
 
     // Rects of local positions of board

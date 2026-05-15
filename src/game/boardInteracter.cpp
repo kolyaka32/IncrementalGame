@@ -8,7 +8,7 @@
 
 // Static objects
 Board BoardInteracter::board;
-ShowState BoardInteracter::state = ShowState::Normal;
+ShowState BoardInteracter::showState = ShowState::Normal;
 
 BoardInteracter::BoardInteracter(const Window& _window, float _boardX, float _boardY, float _panelW)
 : Template(_window),
@@ -39,7 +39,7 @@ void BoardInteracter::click(const Mouse _mouse) {
     if (panelBackplate.in(_mouse)) {
         // Check, if changing show mode
         if (modeSwitchBox.click(_mouse)) {
-            state = ShowState(modeSwitchBox.getValue());
+            showState = ShowState(modeSwitchBox.getValue());
         }
         // Update building menu
         if (buildSwitchBox.click(_mouse)) {
@@ -136,23 +136,10 @@ void BoardInteracter::update(const Mouse _mouse) {
         switch (mousePress) {
         case SDL_BUTTON_LMASK:
             // Check, if try to do build
-            switch (buildSwitchBox.getValue()) {
-            case 1:
-                board.setCell(position, Cell::Air);
-                board.resetCell(position);
-                break;
-
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                board.setCell(position, holdingCell.state);
-                break;
-
-            default:
+            if (buildSwitchBox.getValue()) {
+                board.setCell(position, holdingCell);
+            } else {
                 board.applyPressure(position, 0.2);
-                break;
             }
             break;
 
@@ -188,7 +175,7 @@ void BoardInteracter::blit() const {
     const SDL_FRect rect = grid.absolute(cellRect);
 
     // Draw board
-    switch (state) {
+    switch (showState) {
     case ShowState::Normal:
         board.blitNormal(window, rect);
         break;

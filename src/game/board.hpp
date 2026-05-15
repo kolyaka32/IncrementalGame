@@ -22,7 +22,7 @@ class Board {
     int getHeight() const;
 
     // Interaction
-    void setCell(SDL_Point pos, Cell::CellState cell);
+    void setCell(SDL_Point pos, const Cell cell);
     void resetCell(SDL_Point pos);
     void applyPressure(SDL_Point pos, float pressure);
     void applyTemperature(SDL_Point pos, float temperature);

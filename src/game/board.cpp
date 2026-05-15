@@ -26,8 +26,8 @@ int Board::getHeight() const {
     return height-2;
 }
 
-void Board::setCell(SDL_Point _pos, Cell::CellState _state) {
-    tempCells[_pos.y*width+_pos.x].state = _state;
+void Board::setCell(SDL_Point _pos, const Cell _cell) {
+    tempCells[_pos.y*width+_pos.x].state = _cell.state;
 }
 
 void Board::resetCell(SDL_Point _pos) {
@@ -104,12 +104,12 @@ void Board::update() {
 
     // Resetting side cells to global parameters
     for (int y=0; y < height; ++y) {
-        cells[y*width].exchange(tempCells[y*width]);
-        cells[y*width+width-1].exchange(tempCells[y*width+width-1]);
+        cells[y*width].exchange(tempCells[y*width]);  // Left cells
+        cells[y*width+width-1].exchange(tempCells[y*width+width-1]);  // Right cells
     }
-    for (int x=0; x < width-1; ++x) {
-        cells[x].exchange(tempCells[x]);
-        cells[height*width-x].exchange(tempCells[height*width-x]);
+    for (int x=1; x < width-1; ++x) {
+        cells[x].exchange(tempCells[x]);  // Upper cells
+        cells[height*width-x-1].exchange(tempCells[height*width-x]);  // Bottom cells
     }
 
     // Copying saved array to main
