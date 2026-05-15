@@ -27,22 +27,18 @@ int Board::getHeight() const {
 }
 
 void Board::setCell(SDL_Point _pos, Cell::CellState _state) {
-    //cells[_pos.y*width+_pos.x].state = _state;
     tempCells[_pos.y*width+_pos.x].state = _state;
 }
 
 void Board::resetCell(SDL_Point _pos) {
-    //cells[_pos.y*width+_pos.x].reset();
     tempCells[_pos.y*width+_pos.x].reset();
 }
 
 void Board::applyPressure(SDL_Point _pos, float _pressure) {
-    //cells[_pos.y*width+_pos.x].applyPressure(_pressure);
     tempCells[_pos.y*width+_pos.x].applyPressure(_pressure);
 }
 
 void Board::applyTemperature(SDL_Point _pos, float _temperature) {
-    //cells[_pos.y*width+_pos.x].applyTemperature(_temperature);
     tempCells[_pos.y*width+_pos.x].applyTemperature(_temperature);
 }
 
@@ -93,8 +89,8 @@ void Board::update() {
                 break;
 
             case Cell::VentLeft:
-                cells[y*width+x].vent(cells[y*width+x-1], cells[y*width+x+1],
-                    tempCells[y*width+x-1], tempCells[y*width+x+1]);
+                cells[y*width+x].vent(cells[y*width+x+1], cells[y*width+x-1],
+                    tempCells[y*width+x+1], tempCells[y*width+x-1]);
                 break;
 
             case Cell::Heater:

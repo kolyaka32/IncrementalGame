@@ -17,41 +17,52 @@ class Cell {
     // Possible states of cell
     enum State : CellState {
         // Hollow, air can came
-        Air    = 0b00000,
-        Heater = 0b00100,
+        Air    = 0b0000000,
+        Heater = 0b0001000,
 
         // Filled, air can't came throw
-        Wall      = 0b10000,
-        // Vent types (0b101)
-        VentUp    = 0b10100,
-        VentRight = 0b10101,
-        VentDown  = 0b10110,
-        VentLeft  = 0b10111,
+        Wall        = 0b1000000,
+        // Vent object
+        VentUp      = 0b1001100,
+        VentRight   = 0b1001101,
+        VentDown    = 0b1001110,
+        VentLeft    = 0b1001111,
+        // Check valve (allow flow to one side)
+        ValveUp     = 0b1010100,
+        ValveRight  = 0b1010101,
+        ValveDown   = 0b1010110,
+        ValveLeft   = 0b1010111,
+        // Coolers (cool one side and heat another)
+        CoolerUp    = 0b1011100,
+        CoolerRight = 0b1011101,
+        CoolerDown  = 0b1011110,
+        CoolerLeft  = 0b1011111,
 
         // Special
-        Buldozer  = 0b11111111,
+        Buldozer    = 0b11111111,
     };
 
     // Represent object (from State)
     Uint8 state = Air;
 
  protected:
-    // State defines as 1 bit for air throwput, 2 bits for type, 2 bits for rotation
-    static const CellState wallMask     = 0b10000;
-    static const CellState typeMask     = 0b01100;
-    static const CellState stateMask    = 0b01100;
-    static const CellState rotationMask = 0b10011;
+    // State defines as 1 bit for air throwput, 3 bits for type, 2 bits for rotation
+    static const CellState wallMask     = 0b1000000;  // Represent, is cell contains gase
+    static const CellState typeMask     = 0b0111000;  // Represent cell type
+    static const CellState rotationMask = 0b0000100;  // Represent, if cell could be rotate
+    static const CellState positionMask = 0b0000011;  // Represent current rotation of cell
 
     // Variables per cell
     Gase gase;
 
     // Check state
     bool isWall() const;  // Return, if air can't came throw
-    bool isVent() const;  // Return, if this is vent
+    bool isRotable() const;  // Return, if part can be rotate
 
  public:
     Cell();
     void reset();
+    void rotate();
 
     // Interactions
     void applyPressure(float pressure);

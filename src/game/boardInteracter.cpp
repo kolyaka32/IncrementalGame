@@ -23,7 +23,8 @@ pickedPressure(_window, _panelW/2, 0.3, {"Pressure:%f", "Давление:%f"}, 
 pickedTemperature(_window, _panelW/2, 0.33, {"Temperature:%.1f", "Температура:%.1f"}, Height::Main, BLACK),
 buildText(_window, _panelW/2, 0.5, {"Build object:", "Объект постройки:"}, 1),
 buildSwitchBox(_window, _panelW/2, 0.535, 0.2, {{"Not selected", "Не выбран"},
-    {"Demplish", "Снести"}, {"Wall", "Стена"}, {"Vent", "Вентилятор"}, {"Heater", "Нагреватель"}}),
+    {"Demplish", "Снести"}, {"Wall", "Стена"}, {"Vent", "Вентилятор"}, {"Heater", "Нагреватель"},
+    {"Check valve", "Обратный клапан"}, {"Cooler", "Холодильник"}}),
 resetButton(_window, _panelW/2, 0.8, {"Reset", "Сброс"}) {}
 
 void BoardInteracter::reset() {
@@ -60,6 +61,14 @@ void BoardInteracter::click(const Mouse _mouse) {
                 holdingCell.state = Cell::Heater;
                 break;
 
+            case 5:
+                holdingCell.state = Cell::ValveUp;
+                break;
+
+            case 6:
+                holdingCell.state = Cell::CoolerUp;
+                break;
+
             default:
                 break;
             }
@@ -92,26 +101,7 @@ void BoardInteracter::scroll(const Mouse _mouse, float _wheelY) {
 bool BoardInteracter::press(SDL_Keycode _key) {
     if (_key == SDLK_R) {
         // Check, if try rotate part
-        switch (holdingCell.state) {
-        case Cell::VentUp:
-            holdingCell.state = Cell::VentRight;
-            break;
-
-        case Cell::VentRight:
-            holdingCell.state = Cell::VentDown;
-            break;
-
-        case Cell::VentDown:
-            holdingCell.state = Cell::VentLeft;
-            break;
-
-        case Cell::VentLeft:
-            holdingCell.state = Cell::VentUp;
-            break;
-
-        default:
-            break;
-        }
+        holdingCell.rotate();
         return true;
     }
     if (_key == SDLK_ESCAPE) {
@@ -155,6 +145,8 @@ void BoardInteracter::update(const Mouse _mouse) {
             case 2:
             case 3:
             case 4:
+            case 5:
+            case 6:
                 board.setCell(position, holdingCell.state);
                 break;
 

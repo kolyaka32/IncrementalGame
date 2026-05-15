@@ -17,8 +17,18 @@ bool Cell::isWall() const {
     return state & wallMask;
 }
 
-bool Cell::isVent() const {
-    return state & stateMask == VentUp;
+bool Cell::isRotable() const {
+    return state & rotationMask;
+}
+
+void Cell::rotate() {
+    // Check, if part rotatable
+    if (isRotable()) {
+        // Get new rotation
+        CellState rotation = (state & positionMask) + 1;
+        // Set it to state
+        state = (state & ~positionMask) | (rotation & positionMask);
+    }
 }
 
 void Cell::applyPressure(float _pressure) {
@@ -92,6 +102,38 @@ void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {
 
     case VentLeft:
         _window.blit(_window.getTexture(Textures::Vent), 270.0, _rect);
+        break;
+
+    case ValveUp:
+        _window.blit(_window.getTexture(Textures::Valve), _rect);
+        break;
+
+    case ValveRight:
+        _window.blit(_window.getTexture(Textures::Valve), 90.0, _rect);
+        break;
+
+    case ValveDown:
+        _window.blit(_window.getTexture(Textures::Valve), 180.0, _rect);
+        break;
+
+    case ValveLeft:
+        _window.blit(_window.getTexture(Textures::Valve), 270.0, _rect);
+        break;
+
+    case CoolerUp:
+        _window.blit(_window.getTexture(Textures::Cooler), _rect);
+        break;
+
+    case CoolerRight:
+        _window.blit(_window.getTexture(Textures::Cooler), 90.0, _rect);
+        break;
+
+    case CoolerDown:
+        _window.blit(_window.getTexture(Textures::Cooler), 180.0, _rect);
+        break;
+
+    case CoolerLeft:
+        _window.blit(_window.getTexture(Textures::Cooler), 270.0, _rect);
         break;
 
     case Buldozer:

@@ -42,7 +42,7 @@ public:
     void blitThermal(const Window& window, SDL_FRect rect) const;
     void blitPressure(const Window& window, SDL_FRect rect) const;
 
-    // Global constants
+    // Environment parameters
     static float globalPressure;
     static float globalTemperature;
 };
