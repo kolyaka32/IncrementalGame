@@ -137,7 +137,12 @@ void BoardInteracter::update(const Mouse _mouse) {
         case SDL_BUTTON_LMASK:
             // Check, if try to do build
             if (buildSwitchBox.getValue()) {
-                board.setCell(position, holdingCell);
+                // Check, if demolish cell
+                if (holdingCell.state == Cell::Buldozer) {
+                    board.resetCell(position);
+                } else {
+                    board.setCell(position, holdingCell);
+                }
             } else {
                 board.applyPressure(position, 0.2);
             }
