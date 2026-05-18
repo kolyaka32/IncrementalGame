@@ -24,12 +24,14 @@ private:
     static constexpr float drawTemperatureKoef = 2.5;
     static constexpr float drawPressureKoef = 100.0;
 
+    float getMassFlow(const Gase& second, float power = 0.0) const;
+
 public:
     // Environment parameters
-    static float globalPressure;
-    static float globalTemperature;
+    static Gase environment;
 
     Gase();
+    Gase(float pressure, float temperature);
     void reset();
 
     void addMass(float change);

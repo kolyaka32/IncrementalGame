@@ -74,8 +74,8 @@ void Board::update() {
     }
 
     // Updating cells by it special behevior
-    for (int y=0; y < height; ++y) {
-        for (int x=0; x < width; ++x) {
+    for (int y=1; y < height-1; ++y) {
+        for (int x=1; x < width-1; ++x) {
             switch (cells[y*width+x].state) {
             case Cell::VentUp:
                 cells[y*width+x].vent(cells[(y+1)*width+x], cells[(y-1)*width+x],
