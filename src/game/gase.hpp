@@ -22,7 +22,7 @@ private:
 
     // Constants
     static constexpr float volume = 1.0;
-    static constexpr float pressureKoef = 0.1;
+    static constexpr float pressureKoef = 0.5;
     static constexpr float heatCapacity = 0.1;  // J/kg/K
     static constexpr float drawTemperatureKoef = 2.5;
     static constexpr float drawPressureKoef = 100.0;
@@ -53,6 +53,7 @@ public:
     void exchange(Gase& other);  // Exchange between two elements
     void vent(Gase& outGase, float power);  // Take air from current cell to outlet
     void exchangeValved(Gase& outGase);  // Allow flow only to one direction
+    void cool(Gase& outGase, float power);  // Cool tile by heating up out tile
     void applyChanges();  // Apply accumulated per exchanges changes
 
     // Drawing

@@ -129,6 +129,14 @@ void Gase::exchangeValved(Gase& _outGase) {
     }
 }
 
+void Gase::cool(Gase& _outGase, float _power) {
+    float delta = (temperature - _outGase.temperature - _power) / (temperature + _outGase.temperature + _power);
+
+    // Exchanging energy
+    newEnergy -= newEnergy * delta;
+    _outGase.newEnergy += newEnergy * delta;
+}
+
 void Gase::applyChanges() {
     mass = newMass;
     temperature = newEnergy / mass;

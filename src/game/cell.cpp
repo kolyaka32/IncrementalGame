@@ -81,6 +81,12 @@ void Cell::exchangeValved(Cell& _in, Cell& _out) const {
     }
 }
 
+void Cell::cool(Cell& _in, Cell& _out) const {
+    if (!_in.isWall() && !_out.isWall()) {
+        _in.gase.cool(_out.gase, 10.0);
+    }
+}
+
 void Cell::applyChanges() {
     gase.applyChanges();
 }

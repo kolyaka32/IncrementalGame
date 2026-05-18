@@ -92,6 +92,38 @@ void Board::update() {
             case Cell::Heater:
                 cells[y*width+x].applyTemperature(10.0);
 
+            case Cell::ValveUp:
+                cells[y*width+x].exchangeValved(cells[(y+1)*width+x], cells[(y-1)*width+x]);
+                break;
+
+            case Cell::ValveRight:
+                cells[y*width+x].exchangeValved(cells[y*width+x-1], cells[y*width+x+1]);
+                break;
+
+            case Cell::ValveDown:
+                cells[y*width+x].exchangeValved(cells[(y-1)*width+x], cells[(y+1)*width+x]);
+                break;
+
+            case Cell::ValveLeft:
+                cells[y*width+x].exchangeValved(cells[y*width+x+1], cells[y*width+x-1]);
+                break;
+
+            case Cell::CoolerUp:
+                cells[y*width+x].cool(cells[(y+1)*width+x], cells[(y-1)*width+x]);
+                break;
+
+            case Cell::CoolerRight:
+                cells[y*width+x].cool(cells[y*width+x-1], cells[y*width+x+1]);
+                break;
+
+            case Cell::CoolerDown:
+                cells[y*width+x].cool(cells[(y-1)*width+x], cells[(y+1)*width+x]);
+                break;
+
+            case Cell::CoolerLeft:
+                cells[y*width+x].cool(cells[y*width+x+1], cells[y*width+x-1]);
+                break;
+
             default:
                 break;
             }

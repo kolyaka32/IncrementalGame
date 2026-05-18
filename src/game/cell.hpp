@@ -87,6 +87,7 @@ class Cell {
     void exchange(Cell& other);  // Interact between 2 cell
     void vent(Cell& in, Cell& out) const;
     void exchangeValved(Cell& in, Cell& out) const;
+    void cool(Cell& in, Cell& out) const;
     void applyChanges();
 
     // Drawing
