@@ -67,50 +67,59 @@ void Gase::exchange(const Gase& _src2, Gase& _dst1, Gase& _dst2) const {
     // Calculating mass flow (signed)
     float pressure = getPressure();
     float pressure2 = _src2.getPressure();
-    float deltaMass = (pressure - pressure2) * pressureKoef;
 
     // Changing temperture
-    if (deltaMass > 0.0) {
+    if (pressure > pressure2) {
+        float deltaMass = (pressure - pressure2) * pressureKoef;
+        // Changing temperature
         _dst2.temperature = (_src2.mass*_src2.temperature+deltaMass*temperature) / (_src2.mass+deltaMass);
+        // Changing mass
+        _dst1.mass -= deltaMass;
+        _dst2.mass += deltaMass;
     } else {
+        float deltaMass = (pressure2 - pressure) * pressureKoef;
+        // Changing temperature
         _dst1.temperature = (mass*temperature-deltaMass*_src2.temperature) / (mass-deltaMass);
+        // Changing mass
+        _dst1.mass += deltaMass;
+        _dst2.mass -= deltaMass;
     }
-
-    // Changing pressure
-    _dst1.mass -= deltaMass;
-    _dst2.mass += deltaMass;
 }
 
 void Gase::vent(const Gase& _srcOut, Gase& _dstIn, Gase& _dstOut, float _power) const {
     // Calculating mass flow (signed)
     float pressure = getPressure();
     float pressure2 = _srcOut.getPressure();
-    float deltaMass = (pressure - pressure2 + _power) * pressureKoef;
 
     // Changing temperture
-    if (deltaMass > 0.0) {
-        _dstOut.temperature = (deltaMass*temperature+_srcOut.mass*_srcOut.temperature) / (deltaMass+_srcOut.mass);
+    if (pressure > pressure2) {
+        float deltaMass = (pressure - pressure2 + _power) * pressureKoef;
+        // Changing temperature
+        _dstOut.temperature = (_srcOut.mass*_srcOut.temperature+deltaMass*temperature) / (_srcOut.mass+deltaMass);
+        // Changing mass
+        _dstIn.mass -= deltaMass;
+        _dstOut.mass += deltaMass;
     } else {
+        float deltaMass = (pressure2 - pressure - _power) * pressureKoef;
+        // Changing temperature
         _dstIn.temperature = (mass*temperature-deltaMass*_srcOut.temperature) / (mass-deltaMass);
+        // Changing mass
+        _dstIn.mass += deltaMass;
+        _dstOut.mass -= deltaMass;
     }
-
-    // Changing pressure
-    _dstIn.mass -= deltaMass;
-    _dstOut.mass += deltaMass;
 }
 
 void Gase::exchangeValved(const Gase& _srcOut, Gase& _dstIn, Gase& _dstOut) const {
     // Calculating mass flow (signed)
     float pressure = getPressure();
     float pressure2 = _srcOut.getPressure();
-    float deltaMass = (pressure - pressure2) * pressureKoef;
 
     // Allow only to one side
-    if (deltaMass > 0.0) {
-        // Changing temperture
-        _dstOut.temperature = (deltaMass*temperature+_srcOut.mass*_srcOut.temperature) / (deltaMass+_srcOut.mass);
-
-        // Changing pressure
+    if (pressure > pressure2) {
+        float deltaMass = (pressure - pressure2) * pressureKoef;
+        // Changing temperature
+        _dstOut.temperature = (_srcOut.mass*_srcOut.temperature+deltaMass*temperature) / (_srcOut.mass+deltaMass);
+        // Changing mass
         _dstIn.mass -= deltaMass;
         _dstOut.mass += deltaMass;
     }
