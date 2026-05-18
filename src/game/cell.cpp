@@ -31,20 +31,22 @@ void Cell::rotate() {
     }
 }
 
-void Cell::applyPressure(float _pressure) {
+void Cell::applyMass(float _koef) {
     if (!isWall()) {
-        gase.applyPressure(_pressure);
+        gase.addMass(_koef);
     }
 }
 
-void Cell::applyTemperature(float _temperature) {
+void Cell::reduceMass(float _koef) {
     if (!isWall()) {
-        gase.applyTemperature(_temperature);
+        gase.reduceMass(_koef);
     }
 }
 
-void Cell::heatUpTo(Cell& _dest, float _targetTemp) const {
-    gase.heatUpTo(_dest.gase, _targetTemp);
+void Cell::applyTemperature(float _power) {
+    if (!isWall()) {
+        gase.addTemperature(_power);
+    }
 }
 
 float Cell::getPressure() const {
@@ -69,7 +71,13 @@ void Cell::exchange(Cell& _dest) const {
 
 void Cell::vent(const Cell& _srcIn, const Cell& _srcOut, Cell& _dstIn, Cell& _dstOut) const {
     if (!_srcIn.isWall() && !_srcOut.isWall()) {
-        _srcIn.gase.vent(_srcOut.gase, _dstIn.gase, _dstOut.gase, 0.2);
+        _srcIn.gase.vent(_srcOut.gase, _dstIn.gase, _dstOut.gase, 2.0);
+    }
+}
+
+void Cell::exchangeValved(const Cell& _srcIn, const Cell& _srcOut, Cell& _dstIn, Cell& _dstOut) const {
+    if (!_srcIn.isWall() && !_srcOut.isWall()) {
+        _srcIn.gase.exchangeValved(_srcOut.gase, _dstIn.gase, _dstOut.gase);
     }
 }
 

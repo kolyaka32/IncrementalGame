@@ -24,13 +24,15 @@ class Board {
     // Interaction
     void setCell(SDL_Point pos, const Cell cell);
     void resetCell(SDL_Point pos);
-    void applyPressure(SDL_Point pos, float pressure);
+    void applyMass(SDL_Point pos, float deltaMass);
+    void reduceMass(SDL_Point pos, float deltaMass);
     void applyTemperature(SDL_Point pos, float temperature);
     float getPressure(SDL_Point pos) const;
     float getTemperature(SDL_Point pos) const;
 
     // Every cycle update
     void update();
+    void applyChanges();
 
     // Draw different modes/parts
     void blitNormal(const Window& window, SDL_FRect cellRect) const;

@@ -12,23 +12,31 @@
 class Gase {
 private:
     // Parameters of one cell of gase
+    // Required 3 from 4 paramters: mass, presure, temperature, volume
     // Volume is constant and = 1
-    // Required 2 from 3 paramters: mass, presure, temperature
-    float pressure;
-    float temperature;
+    float mass;         // kg
+    float temperature;  // K
 
     // Constants
-    static constexpr float pressureKoef = 0.1;
-    static constexpr float temperatureKoef = 0.1;
+    static constexpr float volume = 1.0;
+    static constexpr float pressureKoef = 0.01;
+    static constexpr float heatCapacity = 0.1;  // J/kg/K
+    static constexpr float drawTemperatureKoef = 2.5;
+    static constexpr float drawPressureKoef = 100.0;
 
 public:
+    // Environment parameters
+    static float globalPressure;
+    static float globalTemperature;
+
     Gase();
     void reset();
 
-    void applyPressure(float pressure);
-    void applyTemperature(float changeTemperature);
-    void heatUpTo(Gase& dest, float targetTemp) const;
+    void addMass(float change);
+    void reduceMass(float change);
+    void addTemperature(float deltaTemperature);
     float getPressure() const;
+    float getMass() const;
     float getTemperature() const;
 
     // Exchange of heat and pressure between cell with saving to new place
@@ -38,11 +46,10 @@ public:
     // Take air from current cell to outlet
     void vent(const Gase& srcOut, Gase& dstIn, Gase& dstOut, float power) const;
 
+    // Allow flow only to one side
+    void exchangeValved(const Gase& src2, Gase& dst1, Gase& dst2) const;
+
     // Drawing
     void blitThermal(const Window& window, SDL_FRect rect) const;
     void blitPressure(const Window& window, SDL_FRect rect) const;
-
-    // Environment parameters
-    static float globalPressure;
-    static float globalTemperature;
 };

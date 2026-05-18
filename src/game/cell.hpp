@@ -76,9 +76,9 @@ class Cell {
     void rotate();
 
     // Interactions
-    void applyPressure(float pressure);
-    void applyTemperature(float temperature);
-    void heatUpTo(Cell& dest, float targetTemp) const;
+    void applyMass(float koef);
+    void reduceMass(float koef);
+    void applyTemperature(float power);
     float getPressure() const;
     float getTemperature() const;
 
@@ -86,6 +86,7 @@ class Cell {
     void exchange(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to new place
     void exchange(Cell& dest) const;  // Exchange without affect of second part (world)
     void vent(const Cell& srcIn, const Cell& srcOut, Cell& dstIn, Cell& dstOut) const;
+    void exchangeValved(const Cell& srcIn, const Cell& srcOut, Cell& dstIn, Cell& dstOut) const;
 
     // Drawing
     void blitNormal(const Window& window, SDL_FRect rect) const;

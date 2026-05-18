@@ -34,8 +34,12 @@ void Board::resetCell(SDL_Point _pos) {
     tempCells[_pos.y*width+_pos.x].reset();
 }
 
-void Board::applyPressure(SDL_Point _pos, float _pressure) {
-    tempCells[_pos.y*width+_pos.x].applyPressure(_pressure);
+void Board::applyMass(SDL_Point _pos, float _deltaMass) {
+    tempCells[_pos.y*width+_pos.x].applyMass(_deltaMass);
+}
+
+void Board::reduceMass(SDL_Point _pos, float _deltaMass) {
+    tempCells[_pos.y*width+_pos.x].reduceMass(_deltaMass);
 }
 
 void Board::applyTemperature(SDL_Point _pos, float _temperature) {
@@ -94,7 +98,7 @@ void Board::update() {
                 break;
 
             case Cell::Heater:
-                cells[y*width+x].heatUpTo(tempCells[y*width+x], 200);
+                tempCells[y*width+x].applyTemperature(10.0);
 
             default:
                 break;
@@ -111,7 +115,9 @@ void Board::update() {
         cells[x].exchange(tempCells[x]);  // Upper cells
         cells[height*width-x-1].exchange(tempCells[height*width-x]);  // Bottom cells
     }
+}
 
+void Board::applyChanges() {
     // Copying saved array to main
     memcpy(cells, tempCells, sizeof(cells));
 }

@@ -115,6 +115,9 @@ bool BoardInteracter::press(SDL_Keycode _key) {
 }
 
 void BoardInteracter::update(const Mouse _mouse) {
+    // Updating physic
+    board.update();
+
     // Check, if building
     if (buildSwitchBox.getValue() != 0) {
         holdingCellRect.x = _mouse.getX() - holdingCellRect.w/2;
@@ -144,20 +147,20 @@ void BoardInteracter::update(const Mouse _mouse) {
                     board.setCell(position, holdingCell);
                 }
             } else {
-                board.applyPressure(position, 0.2);
+                board.applyMass(position, 1.2);
             }
             break;
 
         case SDL_BUTTON_RMASK:
-            board.applyTemperature(position, 10.0);
+            board.applyTemperature(position, 20.0);
             break;
 
         case SDL_BUTTON_X1MASK:
-            board.applyPressure(position, -4.0);
+            board.reduceMass(position, 2);
             break;
 
         case SDL_BUTTON_X2MASK:
-            board.applyTemperature(position, -10.0);
+            board.applyTemperature(position, -20.0);
             break;
 
         default:
@@ -170,9 +173,7 @@ void BoardInteracter::update(const Mouse _mouse) {
         pickedPressure.setValues(0.0f);
         pickedTemperature.setValues(0.0f);
     }
-
-    // Updating physic
-    board.update();
+    board.applyChanges();
 }
 
 void BoardInteracter::blit() const {
