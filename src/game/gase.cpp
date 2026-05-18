@@ -58,12 +58,7 @@ void Gase::addTemperature(float _power) {
 }
 
 float Gase::getMassFlow(const Gase& _second, float _power) const {
-    float d = mass * temperature - _second.mass * _second.temperature + _power;
-    /*if (d > 0) {
-        return SDL_sqrtf(d) * pressureKoef;
-    } else {
-        return -SDL_sqrtf(-d) * pressureKoef;
-    }*/
+    float d = (mass * temperature - _second.mass * _second.temperature + _power) / (temperature + _second.temperature);
     return d * pressureKoef;
 }
 
@@ -72,7 +67,11 @@ void Gase::exchange() {
     float deltaMass = getMassFlow(environment);
 
     // Changing temperture (not affecting enviroment)
-    newEnergy -= deltaMass * environment.temperature;
+    if (deltaMass > 0) {
+        newEnergy -= deltaMass * environment.temperature;
+    } else {
+        newEnergy -= deltaMass * temperature;
+    }
 
     // Changing mass
     newMass -= deltaMass;
@@ -83,8 +82,13 @@ void Gase::exchange(Gase& _other) {
     float deltaMass = getMassFlow(_other);
 
     // Changing temperture
-    newEnergy -= deltaMass * _other.temperature;
-    _other.newEnergy += deltaMass * temperature;
+    if (deltaMass > 0) {
+        newEnergy -= deltaMass * temperature;
+        _other.newEnergy += deltaMass * temperature;
+    } else {
+        newEnergy -= deltaMass * _other.temperature;
+        _other.newEnergy += deltaMass * _other.temperature;
+    }
 
     // Changing mass
     newMass -= deltaMass;
@@ -96,8 +100,13 @@ void Gase::vent(Gase& _outGase, float _power) {
     float deltaMass = getMassFlow(_outGase, _power);
 
     // Changing temperture
-    newEnergy -= deltaMass * _outGase.temperature;
-    _outGase.newEnergy += deltaMass * temperature;
+    if (deltaMass > 0) {
+        newEnergy -= deltaMass * temperature;
+        _outGase.newEnergy += deltaMass * temperature;
+    } else {
+        newEnergy -= deltaMass * _outGase.temperature;
+        _outGase.newEnergy += deltaMass * _outGase.temperature;
+    }
 
     // Changing mass
     newMass -= deltaMass;
@@ -111,7 +120,7 @@ void Gase::exchangeValved(Gase& _outGase) {
     // Allow only to one side
     if (deltaMass > 0) {
         // Changing temperture
-        newEnergy -= deltaMass * _outGase.temperature;
+        newEnergy -= deltaMass * temperature;
         _outGase.newEnergy += deltaMass * temperature;
 
         // Changing mass
