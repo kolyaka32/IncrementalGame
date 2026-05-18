@@ -13,7 +13,6 @@ class Board {
  private:
     static const int height = 20, width = 20;
     Cell cells[height*width];      // Main array of cells
-    Cell tempCells[height*width];  // Temporary array for correct exchange
 
  public:
     Board();

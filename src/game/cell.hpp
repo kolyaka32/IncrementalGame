@@ -83,10 +83,11 @@ class Cell {
     float getTemperature() const;
 
     // Every cycle update
-    void exchange(const Cell& src2, Cell& dst1, Cell& dst2) const;  // Interact between 2 cell with saving to new place
-    void exchange(Cell& dest) const;  // Exchange without affect of second part (world)
-    void vent(const Cell& srcIn, const Cell& srcOut, Cell& dstIn, Cell& dstOut) const;
-    void exchangeValved(const Cell& srcIn, const Cell& srcOut, Cell& dstIn, Cell& dstOut) const;
+    void exchange();  // Exchange with enviroment
+    void exchange(Cell& other);  // Interact between 2 cell
+    void vent(Cell& in, Cell& out) const;
+    void exchangeValved(Cell& in, Cell& out) const;
+    void applyChanges();
 
     // Drawing
     void blitNormal(const Window& window, SDL_FRect rect) const;

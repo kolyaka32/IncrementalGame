@@ -57,28 +57,32 @@ float Cell::getTemperature() const {
     return gase.getTemperature();
 }
 
-void Cell::exchange(const Cell& _src2, Cell& _dst1, Cell& _dst2) const {
-    if (!isWall() && !_src2.isWall()) {
-        gase.exchange(_src2.gase, _dst1.gase, _dst2.gase);
-    }
-}
-
-void Cell::exchange(Cell& _dest) const {
+void Cell::exchange() {
     if (!isWall()) {
-        gase.exchange(_dest.gase);
+        gase.exchange();
     }
 }
 
-void Cell::vent(const Cell& _srcIn, const Cell& _srcOut, Cell& _dstIn, Cell& _dstOut) const {
-    if (!_srcIn.isWall() && !_srcOut.isWall()) {
-        _srcIn.gase.vent(_srcOut.gase, _dstIn.gase, _dstOut.gase, 2.0);
+void Cell::exchange(Cell& _other) {
+    if (!isWall() && !_other.isWall()) {
+        gase.exchange(_other.gase);
     }
 }
 
-void Cell::exchangeValved(const Cell& _srcIn, const Cell& _srcOut, Cell& _dstIn, Cell& _dstOut) const {
-    if (!_srcIn.isWall() && !_srcOut.isWall()) {
-        _srcIn.gase.exchangeValved(_srcOut.gase, _dstIn.gase, _dstOut.gase);
+void Cell::vent(Cell& _in, Cell& _out) const {
+    if (!_in.isWall() && !_out.isWall()) {
+        _in.gase.vent(_out.gase, 2.0);
     }
+}
+
+void Cell::exchangeValved(Cell& _in, Cell& _out) const {
+    if (!_in.isWall() && !_out.isWall()) {
+        _in.gase.exchangeValved(_out.gase);
+    }
+}
+
+void Cell::applyChanges() {
+    gase.applyChanges();
 }
 
 void Cell::blitNormal(const Window& _window, SDL_FRect _rect) const {

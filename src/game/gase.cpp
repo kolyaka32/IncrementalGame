@@ -14,27 +14,18 @@ Gase::Gase() {}
 Gase::Gase(float _pressure, float _temperature) {
     temperature = _temperature;
     mass = _pressure * volume / _temperature;
+    // Setting temporary variables to basic
+    newMass = mass;
+    newEnergy = mass * temperature;
 }
 
 void Gase::reset() {
     // Setting parameters to global
     temperature = environment.temperature;
     mass = environment.mass;
-}
-
-void Gase::addMass(float _change) {
-    // Temperature doesn't change
-    mass *= _change;
-}
-
-void Gase::reduceMass(float _change) {
-    // Temperature doesn't change
-    mass /= _change;
-}
-
-void Gase::addTemperature(float _power) {
-    // Mass stay constant
-    temperature += _power * heatCapacity;
+    // Setting temporary variables to basic
+    newMass = mass;
+    newEnergy = mass * temperature;
 }
 
 float Gase::getPressure() const {
@@ -49,8 +40,25 @@ float Gase::getTemperature() const {
     return temperature;
 }
 
+void Gase::addMass(float _change) {
+    // Temperature doesn't change
+    newMass *= _change;
+    newEnergy *= _change;
+}
+
+void Gase::reduceMass(float _change) {
+    // Temperature doesn't change
+    newMass /= _change;
+    newEnergy /= _change;
+}
+
+void Gase::addTemperature(float _power) {
+    // Mass stay constant
+    newEnergy += _power * heatCapacity * mass;
+}
+
 float Gase::getMassFlow(const Gase& _second, float _power) const {
-    float d = mass*temperature - _second.mass*_second.temperature + _power;
+    float d = mass * temperature - _second.mass * _second.temperature + _power;
     /*if (d > 0) {
         return SDL_sqrtf(d) * pressureKoef;
     } else {
@@ -59,60 +67,62 @@ float Gase::getMassFlow(const Gase& _second, float _power) const {
     return d * pressureKoef;
 }
 
-void Gase::exchange(Gase& _dest) const {
+void Gase::exchange() {
     // Getting change
     float deltaMass = getMassFlow(environment);
 
     // Changing temperture (not affecting enviroment)
-    if (deltaMass > 0.0) {
-        _dest.temperature = (_dest.mass*_dest.temperature-deltaMass*environment.temperature) / (_dest.mass-deltaMass);
-    }
+    newEnergy -= deltaMass * environment.temperature;
+
     // Changing mass
-    _dest.mass -= deltaMass;
+    newMass -= deltaMass;
 }
 
-void Gase::exchange(const Gase& _src2, Gase& _dst1, Gase& _dst2) const {
+void Gase::exchange(Gase& _other) {
     // Getting change
-    float deltaMass = getMassFlow(_src2);
+    float deltaMass = getMassFlow(_other);
 
     // Changing temperture
-    if (deltaMass > 0.0) {
-        _dst2.temperature = (_dst2.mass*_dst2.temperature+deltaMass*temperature) / (_dst2.mass+deltaMass);
-    } else {
-        _dst1.temperature = (_dst1.mass*_dst1.temperature-deltaMass*_src2.temperature) / (_dst1.mass-deltaMass);
-    }
+    newEnergy -= deltaMass * _other.temperature;
+    _other.newEnergy += deltaMass * temperature;
+
     // Changing mass
-    _dst1.mass -= deltaMass;
-    _dst2.mass += deltaMass;
+    newMass -= deltaMass;
+    _other.newMass += deltaMass;
 }
 
-void Gase::vent(const Gase& _srcOut, Gase& _dstIn, Gase& _dstOut, float _power) const {
+void Gase::vent(Gase& _outGase, float _power) {
     // Getting change
-    float deltaMass = getMassFlow(_srcOut, _power);
+    float deltaMass = getMassFlow(_outGase, _power);
 
     // Changing temperture
-    if (deltaMass > 0.0) {
-        _dstOut.temperature = (_dstOut.mass*_dstOut.temperature+deltaMass*temperature) / (_dstOut.mass+deltaMass);
-    } else {
-        _dstIn.temperature = (_dstIn.mass*_dstIn.temperature-deltaMass*_srcOut.temperature) / (_dstIn.mass-deltaMass);
-    }
+    newEnergy -= deltaMass * _outGase.temperature;
+    _outGase.newEnergy += deltaMass * temperature;
+
     // Changing mass
-    _dstIn.mass -= deltaMass;
-    _dstOut.mass += deltaMass;
+    newMass -= deltaMass;
+    _outGase.newMass += deltaMass;
 }
 
-void Gase::exchangeValved(const Gase& _srcOut, Gase& _dstIn, Gase& _dstOut) const {
+void Gase::exchangeValved(Gase& _outGase) {
     // Getting change
-    float deltaMass = getMassFlow(_srcOut);
+    float deltaMass = getMassFlow(_outGase);
 
     // Allow only to one side
     if (deltaMass > 0) {
-        // Changing temperature
-        _dstOut.temperature = (_dstOut.mass*_dstOut.temperature+deltaMass*temperature) / (_dstOut.mass+deltaMass);
+        // Changing temperture
+        newEnergy -= deltaMass * _outGase.temperature;
+        _outGase.newEnergy += deltaMass * temperature;
+
         // Changing mass
-        _dstIn.mass -= deltaMass;
-        _dstOut.mass += deltaMass;
+        newMass -= deltaMass;
+        _outGase.newMass += deltaMass;
     }
+}
+
+void Gase::applyChanges() {
+    mass = newMass;
+    temperature = newEnergy / mass;
 }
 
 void Gase::blitThermal(const Window& _window, SDL_FRect _rect) const {
