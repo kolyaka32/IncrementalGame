@@ -33,7 +33,7 @@ void Cell::rotate() {
 
 void Cell::applyMass(float _koef) {
     if (!isWall()) {
-        gase.addMass(_koef);
+        gase.addMass(_koef, Gase::environment);
     }
 }
 

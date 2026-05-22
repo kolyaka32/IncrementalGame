@@ -14,16 +14,16 @@ private:
     // Parameters of one cell of gase
     // Required 3 from 4 paramters: mass, presure, temperature, volume
     // Volume is constant and = 1
-    float mass;         // kg
-    float temperature;  // K
+    float mass;         // [kg]
+    float temperature;  // [K]
     // Inter-cycle variables for temporary storage
-    float newMass;      // kg
-    float newEnergy;    // kg*K
+    float newMass;      // [kg]
+    float newEnergy;    // [J]
 
     // Constants
-    static constexpr float volume = 1.0;
-    static constexpr float pressureKoef = 0.5;
-    static constexpr float heatCapacity = 0.1;  // J/kg/K
+    static constexpr float volume = 1.0;        // [m^3]
+    static constexpr float pressureKoef = 0.5;  // [1]
+    static constexpr float heatCapacity = 0.5;  // [J/kg/K]
     static constexpr float drawTemperatureKoef = 2.5;
     static constexpr float drawPressureKoef = 100.0;
 
@@ -43,9 +43,9 @@ public:
     float getTemperature() const;
 
     // Interactions
-    void addMass(float change);
-    void reduceMass(float change);
-    void addTemperature(float deltaTemperature);
+    void reduceMass(float koefMass);
+    void addMass(float deltaMass, const Gase srcGase);
+    void addTemperature(float power);
 
     // Every cycle updates
     // Exchange of heat and pressure between cell with saving to new place

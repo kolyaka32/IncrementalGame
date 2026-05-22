@@ -147,12 +147,12 @@ void BoardInteracter::update(const Mouse _mouse) {
                     board.setCell(position, holdingCell);
                 }
             } else {
-                board.applyMass(position, 1.2);
+                board.applyMass(position, 0.1);
             }
             break;
 
         case SDL_BUTTON_RMASK:
-            board.applyTemperature(position, 20.0);
+            board.applyTemperature(position, 0.1);
             break;
 
         case SDL_BUTTON_X1MASK:
@@ -160,7 +160,7 @@ void BoardInteracter::update(const Mouse _mouse) {
             break;
 
         case SDL_BUTTON_X2MASK:
-            board.applyTemperature(position, -20.0);
+            board.applyTemperature(position, -0.1);
             break;
 
         default:
