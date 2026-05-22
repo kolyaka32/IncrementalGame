@@ -177,6 +177,9 @@ namespace GUI {
             char buffer[100];
             std::snprintf(buffer, sizeof(buffer), texts.getString().c_str(), args...);
 
+            // Clearing previous
+            window.destroy(texture);
+
             // Creating surface with text
             texture = window.createTexture(Fonts::Main, height, buffer, 0, color);
 
