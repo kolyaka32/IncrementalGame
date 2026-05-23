@@ -52,8 +52,15 @@ void Gase::addTemperature(float _power) {
 }
 
 float Gase::getMassFlow(const Gase& _second, float _power) const {
-    float d = (getPressure() - _second.getPressure() + _power) / (temperature + _second.temperature);
-    return d * pressureKoef;
+    float d = (getPressure() - _second.getPressure() + _power) * pressureKoef;
+    // Check, if exceed mass
+    if (d > newMass/2) {
+        return newMass/2;
+    }
+    if (d < -_second.newMass/2) {
+        return -_second.newMass/2;
+    }
+    return d;
 }
 
 void Gase::addMass(float _deltaMass, const Gase _srcGase) {
@@ -69,9 +76,9 @@ void Gase::exchange() {
 
     // Changing temperture (not affecting enviroment)
     if (deltaMass > 0) {
-        addMass(-deltaMass, environment);
-    } else {
         addMass(-deltaMass, *this);
+    } else {
+        addMass(-deltaMass, environment);
     }
 }
 
@@ -116,14 +123,19 @@ void Gase::exchangeValved(Gase& _outGase) {
 }
 
 void Gase::cool(Gase& _outGase, float _power) {
-    float delta = (temperature - _outGase.temperature - _power) / (temperature + _outGase.temperature + _power);
+    if (temperature > _power) {
+        float delta = temperature - _outGase.temperature - _power;
 
-    // Exchanging energy
-    newEnergy -= newEnergy * delta;
-    _outGase.newEnergy += newEnergy * delta;
+        // Exchanging energy
+        newEnergy -= delta * mass * heatCapacity;
+        _outGase.newEnergy += delta * _outGase.mass * heatCapacity;
+    }
 }
 
 void Gase::applyChanges() {
+    if (newMass <= 0.0) {
+        logger.additional("s");
+    }
     mass = newMass;
     temperature = newEnergy / mass / heatCapacity;
 }

@@ -22,7 +22,7 @@ private:
 
     // Constants
     static constexpr float volume = 1.0;        // [m^3]
-    static constexpr float pressureKoef = 0.5;  // [1]
+    static constexpr float pressureKoef = 0.005;  // [1]
     static constexpr float heatCapacity = 0.5;  // [J/kg/K]
     static constexpr float drawTemperatureKoef = 2.5;
     static constexpr float drawPressureKoef = 100.0;
