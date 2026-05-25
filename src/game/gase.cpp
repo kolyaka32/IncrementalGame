@@ -7,7 +7,7 @@
 
 
 // Default world parameters
-Gase Gase::environment{1.0, 20.0};
+Gase Gase::environment{100.0, 300.0};
 
 Gase::Gase() {}
 
@@ -54,11 +54,11 @@ void Gase::addTemperature(float _power) {
 float Gase::getMassFlow(const Gase& _second, float _power) const {
     float d = (getPressure() - _second.getPressure() + _power) * pressureKoef;
     // Check, if exceed mass
-    if (d > newMass/2) {
-        return newMass/2;
+    if (d > mass/8) {
+        return mass/8;
     }
-    if (d < -_second.newMass/2) {
-        return -_second.newMass/2;
+    if (d < -_second.mass/8) {
+        return -_second.mass/8;
     }
     return d;
 }
@@ -133,9 +133,6 @@ void Gase::cool(Gase& _outGase, float _power) {
 }
 
 void Gase::applyChanges() {
-    if (newMass <= 0.0) {
-        logger.additional("s");
-    }
     mass = newMass;
     temperature = newEnergy / mass / heatCapacity;
 }

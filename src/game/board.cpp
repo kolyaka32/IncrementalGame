@@ -90,7 +90,7 @@ void Board::update() {
                 break;
 
             case Cell::Heater:
-                cells[y*width+x].applyTemperature(10.0);
+                cells[y*width+x].applyTemperature(1.0);
 
             case Cell::ValveUp:
                 cells[y*width+x].exchangeValved(cells[(y+1)*width+x], cells[(y-1)*width+x]);

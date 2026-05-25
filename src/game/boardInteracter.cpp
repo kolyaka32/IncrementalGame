@@ -19,8 +19,8 @@ panelBackplate(_window, _panelW/2, 0.5, _panelW, 1.0, 2.0, GREY, BLACK),
 modeText(_window, _panelW/2, 0.15, {"Show mode:", "Режим отображения:"}, 1),
 modeSwitchBox(_window, _panelW/2, 0.185, 0.2, {{"Elements", "Элементы"},
     {"Thermal", "Температурный"}, {"Pressure", "Давление"}}),
-pickedPressure(_window, _panelW/2, 0.3, {"Pressure:%f", "Давление:%f"}, Height::Main, BLACK),
-pickedTemperature(_window, _panelW/2, 0.33, {"Temperature:%.1f", "Температура:%.1f"}, Height::Main, BLACK),
+pickedPressure(_window, _panelW/4, 0.3, {"Pressure:%6.1f", "Давление:%6.1f"}, Height::Main, BLACK, GUI::Aligment::Left),
+pickedTemperature(_window, _panelW/4, 0.33, {"Temperature:%4.1f", "Температура:%4.1f"}, Height::Main, BLACK, GUI::Aligment::Left),
 buildText(_window, _panelW/2, 0.5, {"Build object:", "Объект постройки:"}, 1),
 buildSwitchBox(_window, _panelW/2, 0.535, 0.2, {{"Not selected", "Не выбран"},
     {"Demplish", "Снести"}, {"Wall", "Стена"}, {"Vent", "Вентилятор"}, {"Heater", "Нагреватель"},
@@ -152,7 +152,7 @@ void BoardInteracter::update(const Mouse _mouse) {
             break;
 
         case SDL_BUTTON_RMASK:
-            board.applyTemperature(position, 0.1);
+            board.applyTemperature(position, 1.0);
             break;
 
         case SDL_BUTTON_X1MASK:
@@ -160,7 +160,7 @@ void BoardInteracter::update(const Mouse _mouse) {
             break;
 
         case SDL_BUTTON_X2MASK:
-            board.applyTemperature(position, -0.1);
+            board.applyTemperature(position, -1.0);
             break;
 
         default:

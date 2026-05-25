@@ -12,8 +12,8 @@
 class Board {
  private:
     // Lengthes of field (with side cells)
-    static const int height = 100;
-    static const int width  = 100;
+    static const int height = 20;
+    static const int width  = 20;
     // Main array of cells
     Cell cells[height*width];
 
